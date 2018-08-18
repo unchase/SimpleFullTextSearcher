@@ -208,7 +208,7 @@ namespace SimpleFullTextSearcher
 
         private void this_SearchInfo(SearchInfoEventArgs e)
         {
-            sfsToolStripStatusLabel.Text = @"Найдено совпадений - " + e.Count + @". Проверяется в: " + e.Info.FullName;
+            sfsToolStripStatusLabel.Text = @"Просмотрено файлов - " + e.Count + @". Проверяется в: " + e.Info.FullName;
         }
 
         private void Searcher_ThreadEnded(ThreadEndedEventArgs e)

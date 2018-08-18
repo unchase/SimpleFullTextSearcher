@@ -28,6 +28,7 @@ namespace SimpleFullTextSearcher.FileSearcher
         private static bool _pauseSearch;
         private static SearcherParams _searchParams;
         private static byte[] _containingBytes;
+        private static int _foundedCount;
         private static int _count;
 
         #endregion
@@ -45,7 +46,7 @@ namespace SimpleFullTextSearcher.FileSearcher
 
                 // запоминаем параметры поиска
                 _searchParams = searchParams;
-                _count = 0;
+                _foundedCount = 0;
 
                 _thread = new Thread(SearchThread);
                 _thread.Start();
@@ -78,6 +79,8 @@ namespace SimpleFullTextSearcher.FileSearcher
             _pauseSearch = false;
             _searchParams = null;
             _containingBytes = null;
+            _count = 0;
+            _foundedCount = 0;
         }
 
         private static void SearchThread()
@@ -139,7 +142,7 @@ namespace SimpleFullTextSearcher.FileSearcher
 
             if (ThreadEnded != null)
             {
-                ThreadEnded(new ThreadEndedEventArgs(success, _count, errorMsg));
+                ThreadEnded(new ThreadEndedEventArgs(success, _foundedCount, errorMsg));
             }
         }
 
@@ -156,6 +159,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                 {
                     foreach (var info in dirInfo.GetFileSystemInfos(_searchParams.FileName))
                     {
+                        _count++;
                         if (SearchInfo != null)
                         {
                             SearchInfo(new SearchInfoEventArgs(info, _count));
@@ -173,11 +177,11 @@ namespace SimpleFullTextSearcher.FileSearcher
 
                         if (MatchesRestrictions(info))
                         {
-                            _count++;
+                            _foundedCount++;
 
                             if (FoundInfo != null)
                             {
-                                FoundInfo(new FoundInfoEventArgs(info, _count));
+                                FoundInfo(new FoundInfoEventArgs(info, _foundedCount));
                             }
                         }
                     }
