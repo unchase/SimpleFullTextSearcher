@@ -57,16 +57,9 @@ namespace SimpleFullTextSearcher.FileSearcher
             return success;
         }
 
-        public static void Pause()
-        {
-            _pauseSearch = !_pauseSearch;
-        }
+        public static void Pause() => _pauseSearch = !_pauseSearch;
 
-        public static void Stop()
-        {
-            // устанавливаем флаг для остановки поиска
-            _stopSearch = true;
-        }
+        public static void Stop() =>_stopSearch = true;
 
         #endregion
 

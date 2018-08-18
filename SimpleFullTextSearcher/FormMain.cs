@@ -206,10 +206,7 @@ namespace SimpleFullTextSearcher
             }
         }
 
-        private void this_SearchInfo(SearchInfoEventArgs e)
-        {
-            sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {e.Count}. Проверяется в: {e.Info.FullName}";
-        }
+        private void this_SearchInfo(SearchInfoEventArgs e) => sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {e.Count}. Проверяется в: {e.Info.FullName}";
 
         private void Searcher_ThreadEnded(ThreadEndedEventArgs e)
         {
@@ -260,11 +257,7 @@ namespace SimpleFullTextSearcher
             }
         }
 
-        private void sfsSearchStopButton_Click(object sender, EventArgs e)
-        {
-            Searcher.Stop();
-        }
-
+        private void sfsSearchStopButton_Click(object sender, EventArgs e) => Searcher.Stop();
         
         private void sfsSearchStartButton_Click(object sender, EventArgs e)
         {
@@ -306,27 +299,16 @@ namespace SimpleFullTextSearcher
             Searcher.Pause();
         }
 
-        private void sfsInitialDirectoryClearButton_Click(object sender, EventArgs e)
-        {
-            sfsInitialDirectoryTextBox.Text = "";
-        }
+        private void sfsInitialDirectoryClearButton_Click(object sender, EventArgs e) => sfsInitialDirectoryTextBox.Text = "";
 
-        private void sfsFileNamePatternClearButton_Click(object sender, EventArgs e)
-        {
-            sfsFileNamePatternTextBox.Text = "";
-        }
+        private void sfsFileNamePatternClearButton_Click(object sender, EventArgs e) => sfsFileNamePatternTextBox.Text = "";
 
-        private void sfsSearchTextClearButton_Click(object sender, EventArgs e)
-        {
-            sfsSearchTextTextBox.Text = "";
-        }
+        private void sfsSearchTextClearButton_Click(object sender, EventArgs e) => sfsSearchTextTextBox.Text = "";
 
-        private void sfsAboutButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(
-                "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
-                "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        private void sfsAboutButton_Click(object sender, EventArgs e) => MessageBox.Show(
+            "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
+            "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        
 
         #endregion
 

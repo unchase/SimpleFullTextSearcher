@@ -211,19 +211,18 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
             return null;
         }
 
-        private static bool IsCommonUsAsciiByte(byte testByte)
-        {
-            return testByte == 0x0A //lf
-                   || testByte == 0x0D //cr
-                   || testByte == 0x09 //tab
-                   || testByte >= 0x20 && testByte <= 0x2F //common punctuation
-                   || testByte >= 0x30 && testByte <= 0x39 //digits
-                   || testByte >= 0x3A && testByte <= 0x40 //common punctuation
-                   || testByte >= 0x41 && testByte <= 0x5A //capital letters
-                   || testByte >= 0x5B && testByte <= 0x60 //common punctuation
-                   || testByte >= 0x61 && testByte <= 0x7A //lowercase letters
-                   || testByte >= 0x7B && testByte <= 0x7E;
-        }
+        private static bool IsCommonUsAsciiByte(byte testByte) => (
+            testByte == 0x0A //lf
+            || testByte == 0x0D //cr
+            || testByte == 0x09 //tab
+            || testByte >= 0x20 && testByte <= 0x2F //common punctuation
+            || testByte >= 0x30 && testByte <= 0x39 //digits
+            || testByte >= 0x3A && testByte <= 0x40 //common punctuation
+            || testByte >= 0x41 && testByte <= 0x5A //capital letters
+            || testByte >= 0x5B && testByte <= 0x60 //common punctuation
+            || testByte >= 0x61 && testByte <= 0x7A //lowercase letters
+            || testByte >= 0x7B && testByte <= 0x7E
+        );
 
         private static int DetectSuspiciousUtf8SequenceLength(byte[] sampleBytes, long currentPos)
         {
