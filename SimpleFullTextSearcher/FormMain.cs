@@ -46,12 +46,7 @@ namespace SimpleFullTextSearcher
 
             #region Constructors
 
-            public Settings()
-            {
-                InitialDirectory = "";
-                FileNamePattern = "";
-                SearchText = "";
-            }
+            public Settings() : this("", "", "") { }
 
             public Settings(string initialDirectory, string fileNamePattern, string searchText)
             {
@@ -83,8 +78,7 @@ namespace SimpleFullTextSearcher
                 {
                     if(File.Exists(SearchCriteriaFilePath))
                         return (Settings)new JavaScriptSerializer().Deserialize(File.ReadAllText(SearchCriteriaFilePath), typeof(Settings));
-                    else
-                        return default(Settings);
+                    return default(Settings);
                 }
                 catch (Exception ex)
                 {
@@ -206,10 +200,7 @@ namespace SimpleFullTextSearcher
             }
         }
 
-        private void this_SearchInfo(SearchInfoEventArgs e)
-        {
-            sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {e.Count}. Проверяется в: {e.Info.FullName}";
-        }
+        private void this_SearchInfo(SearchInfoEventArgs e) => sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {e.Count}. Проверяется в: {e.Info.FullName}";
 
         private void Searcher_ThreadEnded(ThreadEndedEventArgs e)
         {
@@ -260,31 +251,25 @@ namespace SimpleFullTextSearcher
             }
         }
 
-        private void sfsSearchStopButton_Click(object sender, EventArgs e)
-        {
-            Searcher.Stop();
-        }
-
+        private void sfsSearchStopButton_Click(object sender, EventArgs e) => Searcher.Stop();
         
         private void sfsSearchStartButton_Click(object sender, EventArgs e)
         {
-            if (CheckInputFields())
+            if (!CheckInputFields()) return;
+            sfsSearchResultsTreeView.Nodes.Clear();
+
+            var pars = new SearcherParams(sfsInitialDirectoryTextBox.Text.Trim(), true, sfsFileNamePatternTextBox.Text,
+                true, sfsSearchTextTextBox.Text.Trim(), Encoding.ASCII);
+
+            if (Searcher.Start(pars))
             {
-                sfsSearchResultsTreeView.Nodes.Clear();
-
-                var pars = new SearcherParams(sfsInitialDirectoryTextBox.Text.Trim(), true, sfsFileNamePatternTextBox.Text,
-                    true, sfsSearchTextTextBox.Text.Trim(), Encoding.ASCII);
-
-                if (Searcher.Start(pars))
-                {
-                    _stopWatch.Restart();
-                    DisableControls();
-                }
-                else
-                {
-                    MessageBox.Show(@"Поиск уже запущен. Остановите поиск или дождитесь окончания процесса.",
-                        @"Запуск поиска", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
+                _stopWatch.Restart();
+                DisableControls();
+            }
+            else
+            {
+                MessageBox.Show(@"Поиск уже запущен. Остановите поиск или дождитесь окончания процесса.",
+                    @"Запуск поиска", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -306,27 +291,16 @@ namespace SimpleFullTextSearcher
             Searcher.Pause();
         }
 
-        private void sfsInitialDirectoryClearButton_Click(object sender, EventArgs e)
-        {
-            sfsInitialDirectoryTextBox.Text = "";
-        }
+        private void sfsInitialDirectoryClearButton_Click(object sender, EventArgs e) => sfsInitialDirectoryTextBox.Text = "";
 
-        private void sfsFileNamePatternClearButton_Click(object sender, EventArgs e)
-        {
-            sfsFileNamePatternTextBox.Text = "";
-        }
+        private void sfsFileNamePatternClearButton_Click(object sender, EventArgs e) => sfsFileNamePatternTextBox.Text = "";
 
-        private void sfsSearchTextClearButton_Click(object sender, EventArgs e)
-        {
-            sfsSearchTextTextBox.Text = "";
-        }
+        private void sfsSearchTextClearButton_Click(object sender, EventArgs e) => sfsSearchTextTextBox.Text = "";
 
-        private void sfsAboutButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(
-                "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
-                "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+        private void sfsAboutButton_Click(object sender, EventArgs e) => MessageBox.Show(
+            "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
+            "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        
 
         #endregion
 
@@ -334,7 +308,7 @@ namespace SimpleFullTextSearcher
         private bool CheckInputFields()
         {
             if (string.IsNullOrEmpty(sfsInitialDirectoryTextBox.Text) ||
-                !(new DirectoryInfo(sfsInitialDirectoryTextBox.Text).Exists))
+                !new DirectoryInfo(sfsInitialDirectoryTextBox.Text).Exists)
             {
                 MessageBox.Show(
                     "Начальная директория поиска не выбрана или не существует!\nВыберите ее и запустите поиск снова.",
@@ -421,7 +395,7 @@ namespace SimpleFullTextSearcher
             sfsSearchStopButton.Enabled = true;
         }
 
-        private string MillisecondsToTimeStringConverter(long milliseconds)
+        private static string MillisecondsToTimeStringConverter(long milliseconds)
         {
             var ts = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(milliseconds));
             return $"{ts.Days} д, {ts.Hours} ч, {ts.Minutes} м, {ts.Seconds} с, {ts.Milliseconds} мс";

@@ -73,10 +73,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
 
         //#endregion
 
-        public static bool FindTextInPdf(string fileFullPath, string text)
-        {
-            return GetTextFromPdf(fileFullPath).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0;
-        }
+        public static bool FindTextInPdf(string fileFullPath, string text) => (GetTextFromPdf(fileFullPath).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0);
 
         private static string GetTextFromPdf(string fileFullPath)
         {
@@ -104,9 +101,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
             try
             {
                 var extractor = new TextExtractor(fileFullPath);
-                if (extractor.ExtractText().IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0)
-                    return true;
-                return false;
+                return extractor.ExtractText().IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0;
             }
             catch (Exception e)
             {

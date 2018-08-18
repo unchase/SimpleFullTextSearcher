@@ -82,12 +82,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 (uint)Marshal.SizeOf(shfi),
                 (uint)(FileInfoFlags.SHGFI_ICON | FileInfoFlags.SHGFI_USEFILEATTRIBUTES | FileInfoFlags.SHGFI_SMALLICON));
 
-            if (res == IntPtr.Zero)
-            {
-                return null;
-            }
-
-            if (shfi.hIcon == IntPtr.Zero)
+            if (res == IntPtr.Zero || shfi.hIcon == IntPtr.Zero)
             {
                 return null;
             }

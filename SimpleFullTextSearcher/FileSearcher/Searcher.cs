@@ -57,16 +57,9 @@ namespace SimpleFullTextSearcher.FileSearcher
             return success;
         }
 
-        public static void Pause()
-        {
-            _pauseSearch = !_pauseSearch;
-        }
+        public static void Pause() => _pauseSearch = !_pauseSearch;
 
-        public static void Stop()
-        {
-            // устанавливаем флаг для остановки поиска
-            _stopSearch = true;
-        }
+        public static void Stop() =>_stopSearch = true;
 
         #endregion
 
@@ -140,10 +133,7 @@ namespace SimpleFullTextSearcher.FileSearcher
 
             _thread = null;
 
-            if (ThreadEnded != null)
-            {
-                ThreadEnded(new ThreadEndedEventArgs(success, _foundedCount, errorMsg));
-            }
+            ThreadEnded?.Invoke(new ThreadEndedEventArgs(success, _foundedCount, errorMsg));
         }
 
         private static void SearchDirectory(DirectoryInfo dirInfo)
@@ -160,10 +150,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                     foreach (var info in dirInfo.GetFileSystemInfos(_searchParams.FileName))
                     {
                         _count++;
-                        if (SearchInfo != null)
-                        {
-                            SearchInfo(new SearchInfoEventArgs(info, _count));
-                        }
+                        SearchInfo?.Invoke(new SearchInfoEventArgs(info, _count));
 
                         if (_stopSearch)
                         {
@@ -179,10 +166,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                         {
                             _foundedCount++;
 
-                            if (FoundInfo != null)
-                            {
-                                FoundInfo(new FoundInfoEventArgs(info, _foundedCount));
-                            }
+                            FoundInfo?.Invoke(new FoundInfoEventArgs(info, _foundedCount));
                         }
                     }
                     

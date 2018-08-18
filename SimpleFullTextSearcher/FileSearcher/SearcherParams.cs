@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using iTextSharp.xmp.impl;
 
 namespace SimpleFullTextSearcher.FileSearcher
 {
