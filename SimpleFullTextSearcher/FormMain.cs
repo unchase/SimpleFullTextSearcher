@@ -72,7 +72,7 @@ namespace SimpleFullTextSearcher
                 catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Не удалось сохранить критерии поиска в файл '" + SearchCriteriaFilePath + "'.\nПроизошла ошибка: " + ex.Message,
+                        $"Не удалось сохранить критерии поиска в файл \"{SearchCriteriaFilePath}\".\nПроизошла ошибка: {ex.Message}",
                         "Сохранение критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -89,8 +89,8 @@ namespace SimpleFullTextSearcher
                 catch (Exception ex)
                 {
                     MessageBox.Show(
-                        "Не удалось загрузить критерии поиска из файла '" + SearchCriteriaFilePath + "'.\nПроизошла ошибка: " +
-                        ex.Message, "Загрузка критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        $"Не удалось загрузить критерии поиска из файла \"{SearchCriteriaFilePath}\".\nПроизошла ошибка: {ex.Message}",
+                        "Загрузка критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return default(Settings);
                 }
             }
@@ -192,7 +192,7 @@ namespace SimpleFullTextSearcher
 
         private void this_FoundInfo(FoundInfoEventArgs e)
         {
-            sfsToolStripStatusLabel.Text = @"Найдено сопадение в файле: " + e.Info.FullName;
+            sfsToolStripStatusLabel.Text = $@"Найдено сопадение в файле: {e.Info.FullName}";
 
             var initialDirectorySplit = e.Info.FullName.Split('\\');
             AddFileInfoIntoTreeView(initialDirectorySplit.ToList(), sfsSearchResultsTreeView.Nodes, e.Info.FullName);
@@ -208,7 +208,7 @@ namespace SimpleFullTextSearcher
 
         private void this_SearchInfo(SearchInfoEventArgs e)
         {
-            sfsToolStripStatusLabel.Text = @"Просмотрено файлов - " + e.Count + @". Проверяется в: " + e.Info.FullName;
+            sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {e.Count}. Проверяется в: {e.Info.FullName}";
         }
 
         private void Searcher_ThreadEnded(ThreadEndedEventArgs e)
@@ -229,7 +229,7 @@ namespace SimpleFullTextSearcher
             {
                 _stopWatch.Stop();
 
-                sfsToolStripStatusLabel.Text = @"Всего найдено совпадений - " + e.Count + @". Затраченное время: " + MillisecondsToTimeStringConverter(_stopWatch.ElapsedMilliseconds);
+                sfsToolStripStatusLabel.Text = $@"Всего найдено совпадений - {e.Count}. Затраченное время: {MillisecondsToTimeStringConverter(_stopWatch.ElapsedMilliseconds)}";
 
                 _stopWatch.Reset();
             }
@@ -237,7 +237,7 @@ namespace SimpleFullTextSearcher
             // показать текст ошибки, если необходимо
             if (!e.Success)
             {
-                MessageBox.Show(@"Во время поиска произошла ошибка: " + e.ErrorMsg, @"Ошибка поиска",
+                MessageBox.Show($@"Во время поиска произошла ошибка: {e.ErrorMsg}", @"Ошибка поиска",
                     MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
@@ -324,7 +324,7 @@ namespace SimpleFullTextSearcher
         private void sfsAboutButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
-                "Программа предназначена для полнотекстового поиска в файлах с задаанными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
+                "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
                 "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -424,8 +424,7 @@ namespace SimpleFullTextSearcher
         private string MillisecondsToTimeStringConverter(long milliseconds)
         {
             var ts = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(milliseconds));
-            return ts.Days + " д, " + ts.Hours + " ч, " + ts.Minutes + " м, " + ts.Seconds + " с, " + ts.Milliseconds +
-                   " мс";
+            return $"{ts.Days} д, {ts.Hours} ч, {ts.Minutes} м, {ts.Seconds} с, {ts.Milliseconds} мс";
         }
 
         #endregion

@@ -102,7 +102,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                         catch (Exception)
                         {
                             success = false;
-                            errorMsg = "Строка\r\n" + _searchParams.ContainingText + "\r\nне может быть конвертирована в массив байтов.";
+                            errorMsg = $"Строка\r\n{_searchParams.ContainingText}\r\nне может быть конвертирована в массив байтов.";
                         }
                     }
                     else
@@ -135,7 +135,7 @@ namespace SimpleFullTextSearcher.FileSearcher
             else
             {
                 success = false;
-                errorMsg = "Каталог\r\n" + _searchParams.SearchDir + "\r\nне доступен.";
+                errorMsg = $"Каталог\r\n{_searchParams.SearchDir}\r\nне доступен.";
             }
 
             _thread = null;
