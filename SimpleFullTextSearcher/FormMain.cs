@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using SimpleFullTextSearcher.Extensions;
 using SimpleFullTextSearcher.FileSearcher;
 using SimpleFullTextSearcher.FileSearcher.EventArgs;
 using SimpleFullTextSearcher.FileSearcher.Helpers;
@@ -68,7 +69,7 @@ namespace SimpleFullTextSearcher
                 {
                     MessageBox.Show(
                         $"Не удалось сохранить критерии поиска в файл \"{SearchCriteriaFilePath}\".\nПроизошла ошибка: {ex.Message}",
-                        "Сохранение критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        @"Сохранение критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -84,7 +85,7 @@ namespace SimpleFullTextSearcher
                 {
                     MessageBox.Show(
                         $"Не удалось загрузить критерии поиска из файла \"{SearchCriteriaFilePath}\".\nПроизошла ошибка: {ex.Message}",
-                        "Загрузка критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        @"Загрузка критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return default(Settings);
                 }
             }
@@ -102,9 +103,9 @@ namespace SimpleFullTextSearcher
 
         private Stopwatch _stopWatch;
 
-        private bool _formClosing = false;
+        private bool _formClosing;
 
-        private bool _searchOnPause = false;
+        private bool _searchOnPause;
 
         #endregion
 
@@ -141,15 +142,45 @@ namespace SimpleFullTextSearcher
         {
             _stopWatch = new Stopwatch();
 
-            // подписываемся на собственные события
-            _foundInfo = this_FoundInfo;
-            _searchInfo = this_SearchInfo;
-            _threadEnded = this_ThreadEnded;
+            // подписываемся на собственные события (с помощью анонимных методов и лямбда-выражений)
+            _foundInfo = eventArgs =>
+            {
+                sfsToolStripStatusLabel.Text = $@"Найдено сопадение в файле: {eventArgs.Info.FullName}";
 
-            // подписываемся на события Searcher'а
-            Searcher.FoundInfo += Searcher_FoundInfo;
-            Searcher.SearchInfo += Searcher_SearchInfo;
-            Searcher.ThreadEnded += Searcher_ThreadEnded;
+                var initialDirectorySplit = eventArgs.Info.FullName.Split('\\');
+                AddFileInfoIntoTreeView(initialDirectorySplit.ToList(), sfsSearchResultsTreeView.Nodes,
+                    eventArgs.Info.FullName);
+            };
+            _searchInfo = eventArgs => sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {eventArgs.Count}. Проверяется в: {eventArgs.Info.FullName}";
+            _threadEnded = eventArgs =>
+            {
+                // делаем активными отключенные Controls
+                EnableControls();
+
+                // выводим затраченное время поиска
+                if (_stopWatch.IsRunning)
+                {
+                    _stopWatch.Stop();
+
+                    sfsToolStripStatusLabel.Text =
+                        $@"Всего найдено совпадений - {eventArgs.Count}. Затраченное время: {
+                                _stopWatch.ElapsedMilliseconds.MillisecondsToTimeString()}";
+
+                    _stopWatch.Reset();
+                }
+
+                // показать текст ошибки, если необходимо
+                if (!eventArgs.Success)
+                {
+                    MessageBox.Show($@"Во время поиска произошла ошибка: {eventArgs.ErrorMsg}", @"Ошибка поиска",
+                        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            };
+
+            // подписываемся на события Searcher'а (с помощью анонимных методов и лямбда-выражений)
+            Searcher.FoundInfo += eventArgs => { if (!_formClosing) Invoke(_foundInfo, eventArgs); };
+            Searcher.SearchInfo += eventArgs => { if (!_formClosing) Invoke(_searchInfo, eventArgs); };
+            Searcher.ThreadEnded += eventArgs => { if (!_formClosing) Invoke(_threadEnded, eventArgs); };
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -174,67 +205,6 @@ namespace SimpleFullTextSearcher
 
         #endregion
 
-        #region Searcher and own events
-
-        private void Searcher_FoundInfo(FoundInfoEventArgs e)
-        {
-            if (!_formClosing)
-            {
-                Invoke(_foundInfo, e);
-            }
-        }
-
-        private void this_FoundInfo(FoundInfoEventArgs e)
-        {
-            sfsToolStripStatusLabel.Text = $@"Найдено сопадение в файле: {e.Info.FullName}";
-
-            var initialDirectorySplit = e.Info.FullName.Split('\\');
-            AddFileInfoIntoTreeView(initialDirectorySplit.ToList(), sfsSearchResultsTreeView.Nodes, e.Info.FullName);
-        }
-
-        private void Searcher_SearchInfo(SearchInfoEventArgs e)
-        {
-            if (!_formClosing)
-            {
-                Invoke(_searchInfo, e);
-            }
-        }
-
-        private void this_SearchInfo(SearchInfoEventArgs e) => sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {e.Count}. Проверяется в: {e.Info.FullName}";
-
-        private void Searcher_ThreadEnded(ThreadEndedEventArgs e)
-        {
-            if (!_formClosing)
-            {
-                Invoke(_threadEnded, e);
-            }
-        }
-
-        private void this_ThreadEnded(ThreadEndedEventArgs e)
-        {
-            // делаем активными отключенные Controls
-            EnableControls();
-
-            // выводим затраченное время поиска
-            if (_stopWatch.IsRunning)
-            {
-                _stopWatch.Stop();
-
-                sfsToolStripStatusLabel.Text = $@"Всего найдено совпадений - {e.Count}. Затраченное время: {MillisecondsToTimeStringConverter(_stopWatch.ElapsedMilliseconds)}";
-
-                _stopWatch.Reset();
-            }
-
-            // показать текст ошибки, если необходимо
-            if (!e.Success)
-            {
-                MessageBox.Show($@"Во время поиска произошла ошибка: {e.ErrorMsg}", @"Ошибка поиска",
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-        }
-
-        #endregion
-
         #region Controls events
 
         private void sfsInitialDirectorySelectButton_Click(object sender, EventArgs e)
@@ -251,7 +221,15 @@ namespace SimpleFullTextSearcher
             }
         }
 
-        private void sfsSearchStopButton_Click(object sender, EventArgs e) => Searcher.Stop();
+        private void sfsSearchStopButton_Click(object sender, EventArgs e)
+        {
+            if (_searchOnPause)
+            {
+                sfsSearchPauseButton_Click(null, null);
+            }
+
+            Searcher.Stop();
+        } 
         
         private void sfsSearchStartButton_Click(object sender, EventArgs e)
         {
@@ -280,13 +258,11 @@ namespace SimpleFullTextSearcher
             {
                 sfsSearchPauseButton.Text = @"Продолжить";
                 _stopWatch.Stop();
-                sfsSearchStopButton.Enabled = false;
             }
             else
             {
                 sfsSearchPauseButton.Text = @"Пауза";
                 _stopWatch.Start();
-                sfsSearchStopButton.Enabled = true; 
             }
             Searcher.Pause();
         }
@@ -299,9 +275,8 @@ namespace SimpleFullTextSearcher
 
         private void sfsAboutButton_Click(object sender, EventArgs e) => MessageBox.Show(
             "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
-            "О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            @"О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
         
-
         #endregion
 
         #region Private methods
@@ -312,7 +287,7 @@ namespace SimpleFullTextSearcher
             {
                 MessageBox.Show(
                     "Начальная директория поиска не выбрана или не существует!\nВыберите ее и запустите поиск снова.",
-                    "Провека входных данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    @"Провека входных данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
@@ -393,12 +368,6 @@ namespace SimpleFullTextSearcher
             sfsSearchTextTextBox.ReadOnly = true;
             sfsSearchPauseButton.Enabled = true;
             sfsSearchStopButton.Enabled = true;
-        }
-
-        private static string MillisecondsToTimeStringConverter(long milliseconds)
-        {
-            var ts = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(milliseconds));
-            return $"{ts.Days} д, {ts.Hours} ч, {ts.Minutes} м, {ts.Seconds} с, {ts.Milliseconds} мс";
         }
 
         #endregion
