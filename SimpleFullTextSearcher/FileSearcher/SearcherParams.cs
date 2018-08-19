@@ -2,7 +2,7 @@
 
 namespace SimpleFullTextSearcher.FileSearcher
 {
-    public class SearcherParams
+    public sealed class SearcherParams
     {
         #region Constructor
         public SearcherParams(string searchDirectories, bool includeSubDirectoriesChecked, string fileName,

@@ -182,7 +182,7 @@
             // sfsSearchLabel
             // 
             this.sfsSearchLabel.AutoSize = true;
-            this.sfsSearchLabel.Location = new System.Drawing.Point(227, 133);
+            this.sfsSearchLabel.Location = new System.Drawing.Point(167, 133);
             this.sfsSearchLabel.Name = "sfsSearchLabel";
             this.sfsSearchLabel.Size = new System.Drawing.Size(42, 13);
             this.sfsSearchLabel.TabIndex = 2;
@@ -191,11 +191,12 @@
             // sfsSearchStartButton
             // 
             this.sfsSearchStartButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchStartButton.Image")));
-            this.sfsSearchStartButton.Location = new System.Drawing.Point(275, 128);
+            this.sfsSearchStartButton.Location = new System.Drawing.Point(215, 128);
             this.sfsSearchStartButton.Name = "sfsSearchStartButton";
-            this.sfsSearchStartButton.Size = new System.Drawing.Size(69, 23);
+            this.sfsSearchStartButton.Size = new System.Drawing.Size(99, 23);
             this.sfsSearchStartButton.TabIndex = 3;
             this.sfsSearchStartButton.Text = "Пуск";
+            this.sfsSearchStartButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsSearchStartButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsSearchStartButton.UseVisualStyleBackColor = true;
             this.sfsSearchStartButton.Click += new System.EventHandler(this.sfsSearchStartButton_Click);
@@ -204,11 +205,12 @@
             // 
             this.sfsSearchPauseButton.Enabled = false;
             this.sfsSearchPauseButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchPauseButton.Image")));
-            this.sfsSearchPauseButton.Location = new System.Drawing.Point(350, 128);
+            this.sfsSearchPauseButton.Location = new System.Drawing.Point(320, 128);
             this.sfsSearchPauseButton.Name = "sfsSearchPauseButton";
             this.sfsSearchPauseButton.Size = new System.Drawing.Size(99, 23);
             this.sfsSearchPauseButton.TabIndex = 3;
             this.sfsSearchPauseButton.Text = "Пауза";
+            this.sfsSearchPauseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsSearchPauseButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsSearchPauseButton.UseVisualStyleBackColor = true;
             this.sfsSearchPauseButton.Click += new System.EventHandler(this.sfsSearchPauseButton_Click);
@@ -217,11 +219,12 @@
             // 
             this.sfsSearchStopButton.Enabled = false;
             this.sfsSearchStopButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchStopButton.Image")));
-            this.sfsSearchStopButton.Location = new System.Drawing.Point(455, 128);
+            this.sfsSearchStopButton.Location = new System.Drawing.Point(425, 128);
             this.sfsSearchStopButton.Name = "sfsSearchStopButton";
-            this.sfsSearchStopButton.Size = new System.Drawing.Size(69, 23);
+            this.sfsSearchStopButton.Size = new System.Drawing.Size(99, 23);
             this.sfsSearchStopButton.TabIndex = 3;
             this.sfsSearchStopButton.Text = "Стоп";
+            this.sfsSearchStopButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsSearchStopButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsSearchStopButton.UseVisualStyleBackColor = true;
             this.sfsSearchStopButton.Click += new System.EventHandler(this.sfsSearchStopButton_Click);

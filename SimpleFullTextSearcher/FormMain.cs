@@ -142,9 +142,9 @@ namespace SimpleFullTextSearcher
             _stopWatch = new Stopwatch();
 
             // подписываемся на собственные события
-            _foundInfo += this_FoundInfo;
-            _searchInfo += this_SearchInfo;
-            _threadEnded += this_ThreadEnded;
+            _foundInfo = this_FoundInfo;
+            _searchInfo = this_SearchInfo;
+            _threadEnded = this_ThreadEnded;
 
             // подписываемся на события Searcher'а
             Searcher.FoundInfo += Searcher_FoundInfo;
