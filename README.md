@@ -1,8 +1,5 @@
 ![SFS logo](https://raw.githubusercontent.com/unchase/SimpleFullTextSearcher/master/images/sfs_logo.png) 
 
-
-# SFS
-
 Simple Full Text Searcher предназначен для полнотекстового поиска в файлах любого типа с возможностью приостановки и полной остановки. В результате поиска выводит список файлов, в которых была обнаружена искомая строка и время, затраченное на поиск.
 
 #UI
