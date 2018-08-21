@@ -7,7 +7,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
     public class IconHelper
     {
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        private struct SHFILEINFO
+        private struct Shfileinfo
         {
             public IntPtr hIcon;
             public int iIcon;
@@ -19,7 +19,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
         }
 
         [DllImport("Shell32.dll", EntryPoint = "SHGetFileInfo", SetLastError = true, CharSet = CharSet.Auto)]
-        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbFileInfo, uint uFlags);
+        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref Shfileinfo psfi, uint cbFileInfo, uint uFlags);
 
         [DllImport("User32.dll", EntryPoint = "DestroyIcon")]
         private static extern int DestroyIcon(IntPtr hIcon);
@@ -75,7 +75,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
         /// <returns>Возвращает Icon файла</returns>
         public static Icon GetIcon(string fileName)
         {
-            var shfi = new SHFILEINFO();
+            var shfi = new Shfileinfo();
             var res = SHGetFileInfo(fileName,
                 (uint)FileAttributeFlags.FILE_ATTRIBUTE_NORMAL,
                 ref shfi,

@@ -5,74 +5,11 @@ using Aspose.Cells;
 using Code7248.word_reader;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using Spire.Doc;
-using Spire.Pdf;
-using PdfDocument = Spire.Pdf.PdfDocument;
 
 namespace SimpleFullTextSearcher.FileSearcher.Helpers
 {
     public static class FullTextSearchHelper
     {
-        // Spire.Office может обрабатывать только 10 файлов, поэтому не задействуем его. Если приобрести лицензию, то можно раскомментировать
-        //#region Spire.Office
-
-        //public static bool FindTextInPdf(string fileFullPath, string text)
-        //{
-        //    try
-        //    {
-        //        var pdf = new PdfDocument(fileFullPath);
-        //        foreach (PdfPageBase page in pdf.Pages)
-        //        {
-        //            if (page.FindText(text).Finds.Any() || page.FindText(text.ToLower()).Finds.Any())
-        //                return true;
-        //        }
-
-        //        return false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //public static bool FindTextInWordFile(string fileFullPath, string text)
-        //{
-        //    try
-        //    {
-        //        var doc = new Document(fileFullPath);
-        //        return doc.GetText().IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //public static bool FindTextInExcellFile(string fileFullPath, string text)
-        //{
-        //    try
-        //    {
-        //        var workbook = new Workbook();
-        //        workbook.LoadFromFile(fileFullPath);
-        //        foreach (var sheet in workbook.Worksheets)
-        //        {
-        //            foreach (var range in sheet.Range)
-        //            {
-        //                if (range.Text.IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0)
-        //                    return true;
-        //            }
-        //        }
-
-        //        return false;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //#endregion
-
         public static bool FindTextInPdf(string fileFullPath, string text) => (GetTextFromPdf(fileFullPath).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0);
 
         private static string GetTextFromPdf(string fileFullPath)
@@ -103,7 +40,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 var extractor = new TextExtractor(fileFullPath);
                 return extractor.ExtractText().IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
@@ -136,7 +73,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 }
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

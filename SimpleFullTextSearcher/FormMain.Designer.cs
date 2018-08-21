@@ -92,41 +92,41 @@
             // 
             // sfsSearchTextClearButton
             // 
+            this.sfsSearchTextClearButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchTextClearButton.Image")));
             this.sfsSearchTextClearButton.Location = new System.Drawing.Point(482, 72);
             this.sfsSearchTextClearButton.Name = "sfsSearchTextClearButton";
             this.sfsSearchTextClearButton.Size = new System.Drawing.Size(24, 23);
             this.sfsSearchTextClearButton.TabIndex = 2;
-            this.sfsSearchTextClearButton.Text = "X";
             this.sfsSearchTextClearButton.UseVisualStyleBackColor = true;
             this.sfsSearchTextClearButton.Click += new System.EventHandler(this.sfsSearchTextClearButton_Click);
             // 
             // sfsFileNamePatternClearButton
             // 
+            this.sfsFileNamePatternClearButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsFileNamePatternClearButton.Image")));
             this.sfsFileNamePatternClearButton.Location = new System.Drawing.Point(482, 46);
             this.sfsFileNamePatternClearButton.Name = "sfsFileNamePatternClearButton";
             this.sfsFileNamePatternClearButton.Size = new System.Drawing.Size(24, 23);
             this.sfsFileNamePatternClearButton.TabIndex = 2;
-            this.sfsFileNamePatternClearButton.Text = "X";
             this.sfsFileNamePatternClearButton.UseVisualStyleBackColor = true;
             this.sfsFileNamePatternClearButton.Click += new System.EventHandler(this.sfsFileNamePatternClearButton_Click);
             // 
             // sfsInitialDirectoryClearButton
             // 
+            this.sfsInitialDirectoryClearButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsInitialDirectoryClearButton.Image")));
             this.sfsInitialDirectoryClearButton.Location = new System.Drawing.Point(482, 20);
             this.sfsInitialDirectoryClearButton.Name = "sfsInitialDirectoryClearButton";
             this.sfsInitialDirectoryClearButton.Size = new System.Drawing.Size(24, 23);
             this.sfsInitialDirectoryClearButton.TabIndex = 2;
-            this.sfsInitialDirectoryClearButton.Text = "X";
             this.sfsInitialDirectoryClearButton.UseVisualStyleBackColor = true;
             this.sfsInitialDirectoryClearButton.Click += new System.EventHandler(this.sfsInitialDirectoryClearButton_Click);
             // 
             // sfsInitialDirectorySelectButton
             // 
+            this.sfsInitialDirectorySelectButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsInitialDirectorySelectButton.Image")));
             this.sfsInitialDirectorySelectButton.Location = new System.Drawing.Point(452, 20);
             this.sfsInitialDirectorySelectButton.Name = "sfsInitialDirectorySelectButton";
             this.sfsInitialDirectorySelectButton.Size = new System.Drawing.Size(24, 23);
             this.sfsInitialDirectorySelectButton.TabIndex = 2;
-            this.sfsInitialDirectorySelectButton.Text = "...";
             this.sfsInitialDirectorySelectButton.UseVisualStyleBackColor = true;
             this.sfsInitialDirectorySelectButton.Click += new System.EventHandler(this.sfsInitialDirectorySelectButton_Click);
             // 
