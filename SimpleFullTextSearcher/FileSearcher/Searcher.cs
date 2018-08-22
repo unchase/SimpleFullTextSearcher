@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.IO;
+using System.Threading.Tasks;
 using SimpleFullTextSearcher.FileSearcher.EventArgs;
 using SimpleFullTextSearcher.FileSearcher.Helpers;
 
@@ -23,8 +24,8 @@ namespace SimpleFullTextSearcher.FileSearcher
 
         #region Variables
 
-        private static Thread _thread;
-        private static bool _stopSearch;
+        private static Task _searchTask;
+        private static CancellationTokenSource _cancellationTokenSource;
         private static bool _pauseSearch;
         private static SearcherParams _searchParams;
         private static byte[] _containingBytes;
@@ -37,29 +38,24 @@ namespace SimpleFullTextSearcher.FileSearcher
 
         public static bool Start(SearcherParams searchParams)
         {
-            var success = false;
+            if (_searchTask?.Status == TaskStatus.Running)
+                return false;
 
-            if (_thread == null)
-            {
-                // при каждом запуске поиска обнуляем все параметры
-                ResetVariables();
+            // при каждом запуске поиска обнуляем все параметры
+            ResetVariables();
 
-                // запоминаем параметры поиска
-                _searchParams = searchParams;
-                _foundedCount = 0;
+            // запоминаем параметры поиска
+            _searchParams = searchParams;
+            _foundedCount = 0;
 
-                _thread = new Thread(SearchThread);
-                _thread.Start();
+            _searchTask = Task.Run(() => SearchTask(), _cancellationTokenSource.Token);
 
-                success = true;
-            }
-
-            return success;
+            return true;
         }
 
         public static void Pause() => _pauseSearch = !_pauseSearch;
 
-        public static void Stop() =>_stopSearch = true;
+        public static void Stop() => _cancellationTokenSource.Cancel();
 
         #endregion
 
@@ -67,8 +63,8 @@ namespace SimpleFullTextSearcher.FileSearcher
 
         private static void ResetVariables()
         {
-            _thread = null;
-            _stopSearch = false;
+            _cancellationTokenSource = new CancellationTokenSource();
+            _searchTask = null;
             _pauseSearch = false;
             _searchParams = null;
             _containingBytes = null;
@@ -76,7 +72,7 @@ namespace SimpleFullTextSearcher.FileSearcher
             _foundedCount = 0;
         }
 
-        private static void SearchThread()
+        private static void SearchTask()
         {
             var success = true;
             var errorMsg = "";
@@ -131,14 +127,14 @@ namespace SimpleFullTextSearcher.FileSearcher
                 errorMsg = $"Каталог\r\n{_searchParams.SearchDir}\r\nне доступен.";
             }
 
-            _thread = null;
+            _searchTask = null;
 
             ThreadEnded?.Invoke(new ThreadEndedEventArgs(success, _foundedCount, errorMsg));
         }
 
         private static void SearchDirectory(DirectoryInfo dirInfo)
         {
-            if (!_stopSearch)
+            if (!_cancellationTokenSource.IsCancellationRequested)
             {
                 while (_pauseSearch)
                 {
@@ -152,7 +148,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                         _count++;
                         SearchInfo?.Invoke(new SearchInfoEventArgs(info, _count));
 
-                        if (_stopSearch)
+                        if (_cancellationTokenSource.IsCancellationRequested)
                         {
                             break;
                         }
@@ -174,7 +170,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                     {
                         foreach (var subDirInfo in dirInfo.GetDirectories())
                         {
-                            if (_stopSearch)
+                            if (_cancellationTokenSource.IsCancellationRequested)
                             {
                                 break;
                             }
@@ -229,7 +225,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                         }
                         break;
                     case ".pdf":
-                        matches = FullTextSearchHelper.FindTextInPdf(info.FullName, _searchParams.ContainingText);
+                        matches = FullTextSearchHelper.FindTextInPdf(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
                         break;
                     case ".doc":
                     case ".docx":
@@ -237,7 +233,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                         break;
                     case ".xls":
                     case ".xlsx":
-                        matches = FullTextSearchHelper.FindTextInExcell(info.FullName, _searchParams.ContainingText);
+                        matches = FullTextSearchHelper.FindTextInExcell(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
                         break;
                     default:
                         matches = FileContainsBytes(info);
@@ -291,55 +287,59 @@ namespace SimpleFullTextSearcher.FileSearcher
 
                 try
                 {
-                    var fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-
-                    // читаем первый блок байтов из файла
-                    var bytesRead = fs.Read(block, 0, block.Length);
-
-                    do
+                    using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read))
                     {
-                        // ищем в текущем блоке совпадение послежовательности байтов
-                        var endPos = bytesRead - compare.Length + 1;
-                        for (var i = 0; i < endPos; i++)
+                        // читаем первый блок байтов из файла
+                        var bytesRead = fs.Read(block, 0, block.Length);
+
+                        do
                         {
-                            // массив байтов (длиной искомой последовательности байтов) на позиции i из текущего блока сравниваем с искомой последовательностью байтов
-                            int j;
-                            for (j = 0; j < compare.Length; j++)
+                            if (_cancellationTokenSource.IsCancellationRequested)
+                                break;
+
+                            // ищем в текущем блоке совпадение послежовательности байтов
+                            var endPos = bytesRead - compare.Length + 1;
+                            for (var i = 0; i < endPos; i++)
                             {
-                                if (block[i + j] != compare[j])
+                                // массив байтов (длиной искомой последовательности байтов) на позиции i из текущего блока сравниваем с искомой последовательностью байтов
+                                int j;
+                                for (j = 0; j < compare.Length; j++)
                                 {
+                                    if (block[i + j] != compare[j])
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                if (j == compare.Length)
+                                {
+                                    // блок содержит искомую последовательность байт
+                                    contains = true;
                                     break;
                                 }
                             }
 
-                            if (j == compare.Length)
+                            // проверяем, завершен ли поиск
+                            if (contains || (fs.Position >= fs.Length))
                             {
-                                // блок содержит искомую последовательность байт
-                                contains = true;
                                 break;
                             }
-                        }
-
-                        // проверяем, завершен ли поиск
-                        if (contains || (fs.Position >= fs.Length))
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            // формируем новый блок байтов
-                            for (var i = 0; i < (compare.Length - 1); i++)
+                            else
                             {
-                                block[i] = block[blockSize + i];
+                                if (_cancellationTokenSource.IsCancellationRequested)
+                                    break;
+
+                                // формируем новый блок байтов
+                                for (var i = 0; i < (compare.Length - 1); i++)
+                                {
+                                    block[i] = block[blockSize + i];
+                                }
+
+                                // считываем новый массив байтов из файла в блок
+                                bytesRead = compare.Length - 1 + fs.Read(block, compare.Length - 1, blockSize);
                             }
-
-                            // считываем новый массив байтов из файла в блок
-                            bytesRead = compare.Length - 1 + fs.Read(block, compare.Length - 1, blockSize);
-                        }
+                        } while (!_cancellationTokenSource.IsCancellationRequested);
                     }
-                    while (!_stopSearch);
-
-                    fs.Close();
                 }
                 catch (Exception)
                 {

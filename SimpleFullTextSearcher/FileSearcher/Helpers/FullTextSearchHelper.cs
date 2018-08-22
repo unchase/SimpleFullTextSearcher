@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Threading;
 using Aspose.Cells;
 using Code7248.word_reader;
 using iTextSharp.text.pdf;
@@ -10,9 +11,9 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
 {
     public static class FullTextSearchHelper
     {
-        public static bool FindTextInPdf(string fileFullPath, string text) => (GetTextFromPdf(fileFullPath).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0);
+        public static bool FindTextInPdf(string fileFullPath, string text, ref CancellationTokenSource cts) => (GetTextFromPdf(fileFullPath, ref cts).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0);
 
-        private static string GetTextFromPdf(string fileFullPath)
+        private static string GetTextFromPdf(string fileFullPath, ref CancellationTokenSource cts)
         {
             var text = new StringBuilder();
             try
@@ -21,6 +22,8 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 {
                     for (var i = 1; i <= reader.NumberOfPages; i++)
                     {
+                        if (cts.IsCancellationRequested)
+                            break;
                         text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
                     }
                 }
@@ -47,7 +50,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
             
         }
 
-        public static bool FindTextInExcell(string fileFullPath, string text)
+        public static bool FindTextInExcell(string fileFullPath, string text, ref CancellationTokenSource cts)
         {
             try
             {
@@ -65,8 +68,13 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 var wbExcel2007 = new Workbook(fileFullPath, loadOptions);
                 foreach (var sheet in wbExcel2007.Worksheets)
                 {
+                    if (cts.IsCancellationRequested)
+                        return false;
                     foreach (Cell cell in sheet.Cells)
                     {
+                        if (cts.IsCancellationRequested)
+                            return false;
+
                         if (cell.StringValue.IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0)
                             return true;
                     }
