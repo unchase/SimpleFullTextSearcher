@@ -25,7 +25,7 @@ namespace SimpleFullTextSearcher.FileSearcher
         #region Variables
 
         private static Task _searchTask;
-        private static CancellationTokenSource _cancellationTokenSource;
+        private static CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private static bool _pauseSearch;
         private static SearcherParams _searchParams;
         private static byte[] _containingBytes;
