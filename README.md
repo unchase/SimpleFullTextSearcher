@@ -1,11 +1,8 @@
 ![SFS logo](https://raw.githubusercontent.com/unchase/SimpleFullTextSearcher/master/images/sfs_logo.png) 
 
+Simple Full Text Searcher предназначен для полнотекстового поиска в файлах любого типа с возможностью приостановки и полной остановки. В результате поиска выводит список файлов, в которых была обнаружена искомая строка и время, затраченное на поиск. [![GitHub Release Downloas](https://img.shields.io/github/downloads/unchase/SimpleFullTextSearcher/total.svg?maxAge=86400&&style=flat-square)](https://github.com/unchase/SimpleFullTextSearcher/releases/latest)
 
-# SFS
-
-Simple Full Text Searcher предназначен для полнотекстового поиска в файлах любого типа с возможностью приостановки и полной остановки. В результате поиска выводит список файлов, в которых была обнаружена искомая строка и время, затраченное на поиск.
-
-#UI
+## UI
 
 ![SFS UI](https://raw.githubusercontent.com/unchase/SimpleFullTextSearcher/master/images/sfs.gif) 
 
