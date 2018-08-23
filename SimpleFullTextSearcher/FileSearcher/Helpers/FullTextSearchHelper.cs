@@ -1,42 +1,49 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using Aspose.Cells;
 using Code7248.word_reader;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.parser;
+using SautinSoft;
+using SautinSoft.Document;
+using LoadOptions = Aspose.Cells.LoadOptions;
 
 namespace SimpleFullTextSearcher.FileSearcher.Helpers
 {
     public static class FullTextSearchHelper
     {
-        public static bool FindTextInPdf(string fileFullPath, string text, ref CancellationTokenSource cts) => (GetTextFromPdf(fileFullPath, ref cts).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0);
-
-        private static string GetTextFromPdf(string fileFullPath, ref CancellationTokenSource cts)
+        public static bool FindTextInPdf(string fileFullPath, string text, ref CancellationTokenSource cts)
         {
-            var text = new StringBuilder();
+            var pdfFocus = new PdfFocus();
             try
             {
-                using (var reader = new PdfReader(fileFullPath))
+                pdfFocus.OpenPdf(fileFullPath);
+                if (pdfFocus.PageCount > 0)
                 {
-                    for (var i = 1; i <= reader.NumberOfPages; i++)
+                    for (var i = 1; i < pdfFocus.PageCount + 1; i++)
                     {
                         if (cts.IsCancellationRequested)
                             break;
-                        text.Append(PdfTextExtractor.GetTextFromPage(reader, i));
+                        if (pdfFocus.ToText(i, i).IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            pdfFocus.ClosePdf();
+                            return true;
+                        }
                     }
                 }
             }
             catch (Exception)
             {
-                return text.ToString();
+                return false;
+            }
+            finally
+            {
+                pdfFocus.ClosePdf();
             }
 
-            return text.ToString();
+            return false;
         }
 
-        public static bool FindTextInWord(string fileFullPath, string text)
+        public static bool FindTextInDoc(string fileFullPath, string text)
         {
             try
             {
@@ -47,7 +54,28 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
             {
                 return false;
             }
-            
+        }
+
+        public static bool FindTextInDocxHtml(string fileFullPath, string text, ref CancellationTokenSource cts)
+        {
+            try
+            {
+                var dc = DocumentCore.Load(fileFullPath);
+                foreach (Run run in dc.GetChildElements(true, ElementType.Run))
+                {
+                    if (cts.IsCancellationRequested)
+                        break;
+
+                    if (run.Text.IndexOf(text, StringComparison.OrdinalIgnoreCase) >= 0)
+                        return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return false;
         }
 
         public static bool FindTextInExcell(string fileFullPath, string text, ref CancellationTokenSource cts)

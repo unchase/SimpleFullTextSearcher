@@ -228,8 +228,11 @@ namespace SimpleFullTextSearcher.FileSearcher
                         matches = FullTextSearchHelper.FindTextInPdf(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
                         break;
                     case ".doc":
+                        matches = FullTextSearchHelper.FindTextInDoc(info.FullName, _searchParams.ContainingText);
+                        break;
                     case ".docx":
-                        matches = FullTextSearchHelper.FindTextInWord(info.FullName, _searchParams.ContainingText);
+                    case ".html":
+                        matches = FullTextSearchHelper.FindTextInDocxHtml(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
                         break;
                     case ".xls":
                     case ".xlsx":
