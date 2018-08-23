@@ -120,7 +120,7 @@ namespace SimpleFullTextSearcher
 
         private delegate void ThreadEndedSyncHandler(ThreadEndedEventArgs e);
 
-        private ThreadEndedSyncHandler _threadEnded;
+        private ThreadEndedSyncHandler _taskEnded;
 
         #endregion
 
@@ -151,7 +151,7 @@ namespace SimpleFullTextSearcher
                     eventArgs.Info.FullName);
             };
             _searchInfo = eventArgs => sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {eventArgs.Count}. Проверяется в: {eventArgs.Info.FullName}";
-            _threadEnded = eventArgs =>
+            _taskEnded = eventArgs =>
             {
                 // делаем активными отключенные Controls
                 EnableControls();
@@ -179,7 +179,7 @@ namespace SimpleFullTextSearcher
             // подписываемся на события Searcher'а (с помощью анонимных методов и лямбда-выражений)
             Searcher.FoundInfo += eventArgs => { if (!_formClosing) Invoke(_foundInfo, eventArgs); };
             Searcher.SearchInfo += eventArgs => { if (!_formClosing) Invoke(_searchInfo, eventArgs); };
-            Searcher.ThreadEnded += eventArgs => { if (!_formClosing) Invoke(_threadEnded, eventArgs); };
+            Searcher.ThreadEnded += eventArgs => { if (!_formClosing) Invoke(_taskEnded, eventArgs); };
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
