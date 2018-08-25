@@ -41,9 +41,6 @@
     <Reference Include="Code7248.word_reader">
       <HintPath>..\libs\Code7248.word_reader.dll</HintPath>
     </Reference>
-    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
-    </Reference>
     <Reference Include="SautinSoft.Document, Version=3.4.8.20, Culture=neutral, PublicKeyToken=e759c76c7515592a, processorArchitecture=MSIL">
       <HintPath>..\packages\sautinsoft.document.3.4.8.20\lib\net45\SautinSoft.Document.dll</HintPath>
     </Reference>
