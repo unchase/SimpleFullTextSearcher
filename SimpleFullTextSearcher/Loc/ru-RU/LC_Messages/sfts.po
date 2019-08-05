@@ -1,0 +1,207 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SFTS\n"
+"POT-Creation-Date: 2019-08-05 01:11+0300\n"
+"PO-Revision-Date: 2019-08-05 01:12+0300\n"
+"Last-Translator: Unchase <spiritkola@hotmail.com>\n"
+"Language-Team: Unchase\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-Basepath: ../../..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-KeywordsList: T._\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:23
+msgid "Should be valid FileStream!"
+msgstr "Необходимо представить валидный FileStream!"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:26
+msgid "The FileStream does not support read operation!"
+msgstr "Представленный FileStream не поддерживает операцию чтения!"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:29
+msgid "The FileStream does not support search operation!"
+msgstr "Представленный FileStream не поддерживает операцию поиска!"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:64
+msgid "Should be valid BOM bytes array!"
+msgstr "Необходимо представить валидный BOM массив байтов!"
+
+#: FileSearcher/Searcher.cs:94
+msgid "The string"
+msgstr "Строка"
+
+#: FileSearcher/Searcher.cs:96
+msgid "cannot be converted to an array of bytes."
+msgstr "не может быть конвертирована в массив байтов."
+
+#: FileSearcher/Searcher.cs:102
+msgid "Search string cannot be empty."
+msgstr "Строка поиска не может быть пустой."
+
+#: FileSearcher/Searcher.cs:129
+msgid "The directory"
+msgstr "Каталог"
+
+#: FileSearcher/Searcher.cs:131
+msgid "not available."
+msgstr "недоступен."
+
+#: FormMain.Designer.cs:79
+msgid "Ready to the first start"
+msgstr "Готов к первому запуску"
+
+#: FormMain.Designer.cs:100
+msgid "Search criteria"
+msgstr "Критерии поиска"
+
+#: FormMain.Designer.cs:109
+msgid "Search in image files (OCR)"
+msgstr "Поиск в файлах изображений (OCR)"
+
+#: FormMain.Designer.cs:120
+msgid "Search in zip-archives"
+msgstr "Искать в zip-архивах"
+
+#: FormMain.Designer.cs:178
+msgid "Searched text:"
+msgstr "Критерии поиска:"
+
+#: FormMain.Designer.cs:194
+msgid "File-name pattern:"
+msgstr "Шаблон имени файла:"
+
+#: FormMain.Designer.cs:211
+msgid "Starting search directory:"
+msgstr "Начальная директория поиска:"
+
+#: FormMain.Designer.cs:220
+msgid "Search:"
+msgstr "Поиск:"
+
+#: FormMain.Designer.cs:229
+msgid "Start"
+msgstr "Старт"
+
+#: FormMain.Designer.cs:243 FormMain.cs:269
+msgid "Pause"
+msgstr "Пауза"
+
+#: FormMain.Designer.cs:257
+msgid "Stop"
+msgstr "Стоп"
+
+#: FormMain.Designer.cs:271
+msgid "Search results"
+msgstr "Результаты поиска"
+
+#: FormMain.Designer.cs:297 FormMain.cs:283
+msgid "About"
+msgstr "О программе"
+
+#: FormMain.Designer.cs:318
+msgid "Language"
+msgstr "Язык"
+
+#: FormMain.cs:70
+msgid "Failed to save search criteria to file"
+msgstr "Не удалось сохранить критерии поиска в файл"
+
+#: FormMain.cs:70 FormMain.cs:86
+msgid "An error has occurred:"
+msgstr "Произошла ошибка:"
+
+#: FormMain.cs:71
+msgid "Saving search criteria"
+msgstr "Сохранение критериев поиска"
+
+#: FormMain.cs:86
+msgid "Failed to load search criteria from file"
+msgstr "Не удалось загрузить критерии поиска из файла"
+
+#: FormMain.cs:87
+msgid "Loading search criteria"
+msgstr "Загрузка критериев поиска"
+
+#: FormMain.cs:147
+msgid "Found matching in the file:"
+msgstr "Найдено совпадение в файле:"
+
+#: FormMain.cs:154
+msgid "Viewed Files"
+msgstr "Просмотрено файлов"
+
+#: FormMain.cs:156
+msgid "Search in:"
+msgstr "Проверяется в:"
+
+#: FormMain.cs:169
+msgid "Total matches found"
+msgstr "Всего найдено совпадений"
+
+#: FormMain.cs:171
+msgid "Elapsed time:"
+msgstr "Затраченное время:"
+
+#: FormMain.cs:180
+msgid "An error occurred during the search:"
+msgstr "Во время поиска произошла ошибка:"
+
+#: FormMain.cs:180
+msgid "Searching error"
+msgstr "Ошибка поиска"
+
+#: FormMain.cs:220
+msgid "Select the initial search directory"
+msgstr "Выберите начальную директорию поиска"
+
+#: FormMain.cs:254
+msgid ""
+"Search is already running. Stop the search or wait for the process to "
+"complete."
+msgstr "Поиск уже запущен. Остановите поиск или дождитесь окончания процесса."
+
+#: FormMain.cs:255
+msgid "Start searching"
+msgstr "Запуск поиска"
+
+#: FormMain.cs:264
+msgid "Continue"
+msgstr "Продолжить"
+
+#: FormMain.cs:282
+msgid ""
+"The program is designed for full-text search in files with specified search "
+"criteria."
+msgstr ""
+"Программа предназначена для полнотекстового поиска в файлах с заданными "
+"критериями поиска."
+
+#: FormMain.cs:282
+msgid "Author: unchase (https://github.com/unchase), august 2018."
+msgstr "Автор: unchase (https://github.com/unchase), август 2018 г."
+
+#: FormMain.cs:294
+msgid "The search initial directory is not selected or does not exist!"
+msgstr "Начальная директория поиска не выбрана или не существует!"
+
+#: FormMain.cs:294
+msgid "Select it and run the search again."
+msgstr "Выберите ее и запустите поиск снова."
+
+#: FormMain.cs:295 FormMain.cs:303 FormMain.cs:311
+msgid "Input Validation"
+msgstr "Провека входных данных"
+
+#: FormMain.cs:302
+msgid "The file name template should not be empty."
+msgstr "Шаблон имени файла не должен быть пуст."
+
+#: FormMain.cs:310
+msgid "The text to be searched should not be empty."
+msgstr "Искомый текст не должен быть пуст."

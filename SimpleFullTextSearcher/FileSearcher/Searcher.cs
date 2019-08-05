@@ -48,7 +48,7 @@ namespace SimpleFullTextSearcher.FileSearcher
             _searchParams = searchParams;
             _foundedCount = 0;
 
-            _searchTask = Task.Run(() => SearchTask(), _cancellationTokenSource.Token);
+            _searchTask = Task.Run(SearchTask, _cancellationTokenSource.Token);
 
             return true;
         }
@@ -77,7 +77,7 @@ namespace SimpleFullTextSearcher.FileSearcher
             var success = true;
             var errorMsg = "";
 
-            if ((_searchParams.SearchDir.Length >= 3) && (Directory.Exists(_searchParams.SearchDir)))
+            if (_searchParams.SearchDir.Length >= 3 && Directory.Exists(_searchParams.SearchDir))
             {
                 if (_searchParams.ContainingChecked)
                 {
@@ -91,13 +91,15 @@ namespace SimpleFullTextSearcher.FileSearcher
                         catch (Exception)
                         {
                             success = false;
-                            errorMsg = $"Строка\r\n{_searchParams.ContainingText}\r\nне может быть конвертирована в массив байтов.";
+                            errorMsg = T._("The string") + //"Строка" +
+                                       $"\r\n{_searchParams.ContainingText}\r\n" +
+                                       T._("cannot be converted to an array of bytes."); //"не может быть конвертирована в массив байтов.");
                         }
                     }
                     else
                     {
                         success = false;
-                        errorMsg = "Строка поиска не может быть пустой.";
+                        errorMsg = T._("Search string cannot be empty."); //"Строка поиска не может быть пустой.");
                     }
                 }
 
@@ -119,12 +121,14 @@ namespace SimpleFullTextSearcher.FileSearcher
                         SearchDirectory(dirInfo);
                     }
                 }
-                
+
             }
             else
             {
                 success = false;
-                errorMsg = $"Каталог\r\n{_searchParams.SearchDir}\r\nне доступен.";
+                errorMsg = T._("The directory") + //"Каталог\r\n" +
+                           $"{_searchParams.SearchDir}\r\n" +
+                           T._("not available."); //"недоступен.");
             }
 
             _searchTask = null;
@@ -165,7 +169,7 @@ namespace SimpleFullTextSearcher.FileSearcher
                             FoundInfo?.Invoke(new FoundInfoEventArgs(info, _foundedCount));
                         }
                     }
-                    
+
                     if (_searchParams.IncludeSubDirsChecked)
                     {
                         foreach (var subDirInfo in dirInfo.GetDirectories())
@@ -204,10 +208,10 @@ namespace SimpleFullTextSearcher.FileSearcher
                     case ".ini":
                     case ".json":
                     case ".csv":
+                    case ".yaml":
                         try
                         {
-                            var encoding = TextFileEncodingHelper.DetectTextFileEncoding(info.FullName) ??
-                                           _searchParams.Encoding;
+                            var encoding = TextFileEncodingHelper.DetectTextFileEncoding(info.FullName) ?? _searchParams.Encoding;
                             using (var sr = new StreamReader(info.FullName, encoding))
                                 matches = sr.ReadToEnd().IndexOf(_searchParams.ContainingText, StringComparison.OrdinalIgnoreCase) >= 0;
                         }
@@ -215,7 +219,6 @@ namespace SimpleFullTextSearcher.FileSearcher
                         {
                             matches = false;
                         }
-                        
                         break;
                     case ".rtf":
                         using (var rtBox = new System.Windows.Forms.RichTextBox())
@@ -225,18 +228,88 @@ namespace SimpleFullTextSearcher.FileSearcher
                         }
                         break;
                     case ".pdf":
-                        matches = FullTextSearchHelper.FindTextInPdf(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        matches = FullTextSearchHelper.FindTextInPdfFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
                         break;
                     case ".doc":
-                        matches = FullTextSearchHelper.FindTextInDoc(info.FullName, _searchParams.ContainingText);
+                        matches = FullTextSearchHelper.FindTextInDocFile(info.FullName, _searchParams.ContainingText);
                         break;
                     case ".docx":
                     case ".html":
-                        matches = FullTextSearchHelper.FindTextInDocxHtml(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                    case ".dot":
+                    case ".dotx":
+                    case ".dotm":
+                    case ".odt":
+                    case ".ott":
+                    case ".docm":
+                        matches = FullTextSearchHelper.FindTextInDocumentFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
                         break;
                     case ".xls":
                     case ".xlsx":
-                        matches = FullTextSearchHelper.FindTextInExcell(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        matches = FullTextSearchHelper.FindTextInExcellFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".pptx":
+                    case ".ppt":
+                    case ".pot":
+                    case ".pps":
+                    case ".potx":
+                    case ".ppsx":
+                    case ".odp":
+                    case ".ppsm":
+                    case ".pptm":
+                        matches = FullTextSearchHelper.FindTextInPresentationFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".one":
+                    case ".onetoc2":
+                        matches = FullTextSearchHelper.FindTextInOneNoteFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".epub":
+                        matches = FullTextSearchHelper.FindTextInEpubFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".fb2":
+                        matches = FullTextSearchHelper.FindTextInFb2File(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".vsdx":
+                    case ".xps":
+                        matches = FullTextSearchHelper.FindTextInPackageFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".png":
+                    case ".bmp":
+                    case ".gif":
+                    case ".jpeg":
+                    case ".tiff":
+                    case ".tif":
+                        if (_searchParams.SearchInImages)
+                            matches = FullTextSearchHelper.FindTextInImageFile(info.FullName, _searchParams.ContainingText, ref _cancellationTokenSource);
+                        break;
+                    case ".zip":
+                        if (_searchParams.SearchInZipArchive)
+                        {
+                            // ToDo: проверять для всех файлов архива
+                            // 1. Распаковать файлы архива во временный каталог
+                            // 2. Для каждого файла вызывать поиск
+                            // 3. Потом удалить временный каталог вместе с файлаами
+
+                            //using (var fPackage = Package.Open(info.FullName, FileMode.Open, FileAccess.Read))
+                            //{
+                            //    foreach (var fPart in fPackage.GetParts())
+                            //    {
+                            //        if (_cancellationTokenSource.IsCancellationRequested)
+                            //            break;
+
+                            //        using (var fPartStream = fPart.GetStream(FileMode.Open))
+                            //        {
+                            //            using (var textReader = new StreamReader(fPartStream))
+                            //            {
+                            //                var fPartText = textReader.ReadToEnd();
+                            //                if (fPartText.Contains(_searchParams.ContainingText))
+                            //                    matches = true;
+                            //            }
+                            //        }
+                            //    }
+                            //}
+
+                        }
+                        matches = false;
                         break;
                     default:
                         matches = FileContainsBytes(info);

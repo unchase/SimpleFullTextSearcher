@@ -23,7 +23,7 @@
         #region Код, автоматически созданный конструктором форм Windows
 
         /// <summary>
-        /// Требуемый метод для поддержки конструктора — не изменяйте 
+        /// Требуемый метод для поддержки конструктора — не изменяйте
         /// содержимое этого метода с помощью редактора кода.
         /// </summary>
         private void InitializeComponent()
@@ -33,6 +33,8 @@
             this.sfsStatusStrip = new System.Windows.Forms.StatusStrip();
             this.sfsToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.sfsSearchCriteriaGroupBox = new System.Windows.Forms.GroupBox();
+            this.searchInImagescheckBox = new System.Windows.Forms.CheckBox();
+            this.searchInZipArchiveCheckBox = new System.Windows.Forms.CheckBox();
             this.sfsSearchTextClearButton = new System.Windows.Forms.Button();
             this.sfsFileNamePatternClearButton = new System.Windows.Forms.Button();
             this.sfsInitialDirectoryClearButton = new System.Windows.Forms.Button();
@@ -51,9 +53,14 @@
             this.sfsSearchResultsTreeView = new System.Windows.Forms.TreeView();
             this.sfsTreeViewImageList = new System.Windows.Forms.ImageList(this.components);
             this.sfsAboutButton = new System.Windows.Forms.Button();
+            this.menuStripMainForm = new System.Windows.Forms.MenuStrip();
+            this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ruLangToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enLangToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sfsStatusStrip.SuspendLayout();
             this.sfsSearchCriteriaGroupBox.SuspendLayout();
             this.sfsSearchResultsGroupBox.SuspendLayout();
+            this.menuStripMainForm.SuspendLayout();
             this.SuspendLayout();
             // 
             // sfsStatusStrip
@@ -68,11 +75,13 @@
             // sfsToolStripStatusLabel
             // 
             this.sfsToolStripStatusLabel.Name = "sfsToolStripStatusLabel";
-            this.sfsToolStripStatusLabel.Size = new System.Drawing.Size(143, 17);
-            this.sfsToolStripStatusLabel.Text = "Готов к первому запуску";
+            this.sfsToolStripStatusLabel.Size = new System.Drawing.Size(122, 17);
+            this.sfsToolStripStatusLabel.Text = "Ready to the first start";
             // 
             // sfsSearchCriteriaGroupBox
             // 
+            this.sfsSearchCriteriaGroupBox.Controls.Add(this.searchInImagescheckBox);
+            this.sfsSearchCriteriaGroupBox.Controls.Add(this.searchInZipArchiveCheckBox);
             this.sfsSearchCriteriaGroupBox.Controls.Add(this.sfsSearchTextClearButton);
             this.sfsSearchCriteriaGroupBox.Controls.Add(this.sfsFileNamePatternClearButton);
             this.sfsSearchCriteriaGroupBox.Controls.Add(this.sfsInitialDirectoryClearButton);
@@ -83,12 +92,34 @@
             this.sfsSearchCriteriaGroupBox.Controls.Add(this.sfsFileNamePatternLabel);
             this.sfsSearchCriteriaGroupBox.Controls.Add(this.sfsInitialDirectoryTextBox);
             this.sfsSearchCriteriaGroupBox.Controls.Add(this.sfsInitialDirectoryLabel);
-            this.sfsSearchCriteriaGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.sfsSearchCriteriaGroupBox.Location = new System.Drawing.Point(12, 28);
             this.sfsSearchCriteriaGroupBox.Name = "sfsSearchCriteriaGroupBox";
-            this.sfsSearchCriteriaGroupBox.Size = new System.Drawing.Size(512, 110);
+            this.sfsSearchCriteriaGroupBox.Size = new System.Drawing.Size(512, 129);
             this.sfsSearchCriteriaGroupBox.TabIndex = 1;
             this.sfsSearchCriteriaGroupBox.TabStop = false;
-            this.sfsSearchCriteriaGroupBox.Text = "Критерии поиска";
+            this.sfsSearchCriteriaGroupBox.Text = "Search criteria";
+            // 
+            // searchInImagescheckBox
+            // 
+            this.searchInImagescheckBox.AutoSize = true;
+            this.searchInImagescheckBox.Location = new System.Drawing.Point(6, 106);
+            this.searchInImagescheckBox.Name = "searchInImagescheckBox";
+            this.searchInImagescheckBox.Size = new System.Drawing.Size(155, 17);
+            this.searchInImagescheckBox.TabIndex = 4;
+            this.searchInImagescheckBox.Text = "Search in image files (OCR)";
+            this.searchInImagescheckBox.UseVisualStyleBackColor = true;
+            // 
+            // searchInZipArchiveCheckBox
+            // 
+            this.searchInZipArchiveCheckBox.AutoSize = true;
+            this.searchInZipArchiveCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.searchInZipArchiveCheckBox.Location = new System.Drawing.Point(376, 106);
+            this.searchInZipArchiveCheckBox.Name = "searchInZipArchiveCheckBox";
+            this.searchInZipArchiveCheckBox.Size = new System.Drawing.Size(130, 17);
+            this.searchInZipArchiveCheckBox.TabIndex = 3;
+            this.searchInZipArchiveCheckBox.Text = "Search in zip-archives";
+            this.searchInZipArchiveCheckBox.UseVisualStyleBackColor = true;
+            this.searchInZipArchiveCheckBox.Visible = false;
             // 
             // sfsSearchTextClearButton
             // 
@@ -142,9 +173,9 @@
             this.sfsSearchTextLabel.AutoSize = true;
             this.sfsSearchTextLabel.Location = new System.Drawing.Point(6, 77);
             this.sfsSearchTextLabel.Name = "sfsSearchTextLabel";
-            this.sfsSearchTextLabel.Size = new System.Drawing.Size(89, 13);
+            this.sfsSearchTextLabel.Size = new System.Drawing.Size(76, 13);
             this.sfsSearchTextLabel.TabIndex = 0;
-            this.sfsSearchTextLabel.Text = "Искомый текст:";
+            this.sfsSearchTextLabel.Text = "Searched text:";
             // 
             // sfsFileNamePatternTextBox
             // 
@@ -158,9 +189,9 @@
             this.sfsFileNamePatternLabel.AutoSize = true;
             this.sfsFileNamePatternLabel.Location = new System.Drawing.Point(6, 51);
             this.sfsFileNamePatternLabel.Name = "sfsFileNamePatternLabel";
-            this.sfsFileNamePatternLabel.Size = new System.Drawing.Size(119, 13);
+            this.sfsFileNamePatternLabel.Size = new System.Drawing.Size(91, 13);
             this.sfsFileNamePatternLabel.TabIndex = 0;
-            this.sfsFileNamePatternLabel.Text = "Шаблон имени файла:";
+            this.sfsFileNamePatternLabel.Text = "File-name pattern:";
             // 
             // sfsInitialDirectoryTextBox
             // 
@@ -175,27 +206,27 @@
             this.sfsInitialDirectoryLabel.AutoSize = true;
             this.sfsInitialDirectoryLabel.Location = new System.Drawing.Point(6, 25);
             this.sfsInitialDirectoryLabel.Name = "sfsInitialDirectoryLabel";
-            this.sfsInitialDirectoryLabel.Size = new System.Drawing.Size(166, 13);
+            this.sfsInitialDirectoryLabel.Size = new System.Drawing.Size(124, 13);
             this.sfsInitialDirectoryLabel.TabIndex = 0;
-            this.sfsInitialDirectoryLabel.Text = "Начальная директория поиска:";
+            this.sfsInitialDirectoryLabel.Text = "Starting search directory:";
             // 
             // sfsSearchLabel
             // 
             this.sfsSearchLabel.AutoSize = true;
-            this.sfsSearchLabel.Location = new System.Drawing.Point(167, 133);
+            this.sfsSearchLabel.Location = new System.Drawing.Point(167, 168);
             this.sfsSearchLabel.Name = "sfsSearchLabel";
-            this.sfsSearchLabel.Size = new System.Drawing.Size(42, 13);
+            this.sfsSearchLabel.Size = new System.Drawing.Size(44, 13);
             this.sfsSearchLabel.TabIndex = 2;
-            this.sfsSearchLabel.Text = "Поиск:";
+            this.sfsSearchLabel.Text = "Search:";
             // 
             // sfsSearchStartButton
             // 
             this.sfsSearchStartButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchStartButton.Image")));
-            this.sfsSearchStartButton.Location = new System.Drawing.Point(215, 128);
+            this.sfsSearchStartButton.Location = new System.Drawing.Point(215, 163);
             this.sfsSearchStartButton.Name = "sfsSearchStartButton";
             this.sfsSearchStartButton.Size = new System.Drawing.Size(99, 23);
             this.sfsSearchStartButton.TabIndex = 3;
-            this.sfsSearchStartButton.Text = "Пуск";
+            this.sfsSearchStartButton.Text = "Start";
             this.sfsSearchStartButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsSearchStartButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsSearchStartButton.UseVisualStyleBackColor = true;
@@ -205,11 +236,11 @@
             // 
             this.sfsSearchPauseButton.Enabled = false;
             this.sfsSearchPauseButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchPauseButton.Image")));
-            this.sfsSearchPauseButton.Location = new System.Drawing.Point(320, 128);
+            this.sfsSearchPauseButton.Location = new System.Drawing.Point(320, 163);
             this.sfsSearchPauseButton.Name = "sfsSearchPauseButton";
             this.sfsSearchPauseButton.Size = new System.Drawing.Size(99, 23);
             this.sfsSearchPauseButton.TabIndex = 3;
-            this.sfsSearchPauseButton.Text = "Пауза";
+            this.sfsSearchPauseButton.Text = "Pause";
             this.sfsSearchPauseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsSearchPauseButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsSearchPauseButton.UseVisualStyleBackColor = true;
@@ -219,11 +250,11 @@
             // 
             this.sfsSearchStopButton.Enabled = false;
             this.sfsSearchStopButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsSearchStopButton.Image")));
-            this.sfsSearchStopButton.Location = new System.Drawing.Point(425, 128);
+            this.sfsSearchStopButton.Location = new System.Drawing.Point(425, 163);
             this.sfsSearchStopButton.Name = "sfsSearchStopButton";
             this.sfsSearchStopButton.Size = new System.Drawing.Size(99, 23);
             this.sfsSearchStopButton.TabIndex = 3;
-            this.sfsSearchStopButton.Text = "Стоп";
+            this.sfsSearchStopButton.Text = "Stop";
             this.sfsSearchStopButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsSearchStopButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsSearchStopButton.UseVisualStyleBackColor = true;
@@ -232,12 +263,12 @@
             // sfsSearchResultsGroupBox
             // 
             this.sfsSearchResultsGroupBox.Controls.Add(this.sfsSearchResultsTreeView);
-            this.sfsSearchResultsGroupBox.Location = new System.Drawing.Point(12, 157);
+            this.sfsSearchResultsGroupBox.Location = new System.Drawing.Point(12, 193);
             this.sfsSearchResultsGroupBox.Name = "sfsSearchResultsGroupBox";
-            this.sfsSearchResultsGroupBox.Size = new System.Drawing.Size(512, 402);
+            this.sfsSearchResultsGroupBox.Size = new System.Drawing.Size(512, 366);
             this.sfsSearchResultsGroupBox.TabIndex = 4;
             this.sfsSearchResultsGroupBox.TabStop = false;
-            this.sfsSearchResultsGroupBox.Text = "Результаты поиска";
+            this.sfsSearchResultsGroupBox.Text = "Search results";
             // 
             // sfsSearchResultsTreeView
             // 
@@ -259,14 +290,49 @@
             // sfsAboutButton
             // 
             this.sfsAboutButton.Image = ((System.Drawing.Image)(resources.GetObject("sfsAboutButton.Image")));
-            this.sfsAboutButton.Location = new System.Drawing.Point(12, 128);
+            this.sfsAboutButton.Location = new System.Drawing.Point(12, 163);
             this.sfsAboutButton.Name = "sfsAboutButton";
             this.sfsAboutButton.Size = new System.Drawing.Size(113, 23);
             this.sfsAboutButton.TabIndex = 3;
-            this.sfsAboutButton.Text = "О программе";
+            this.sfsAboutButton.Text = "About";
+            this.sfsAboutButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.sfsAboutButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.sfsAboutButton.UseVisualStyleBackColor = true;
             this.sfsAboutButton.Click += new System.EventHandler(this.sfsAboutButton_Click);
+            // 
+            // menuStripMainForm
+            // 
+            this.menuStripMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.languageToolStripMenuItem});
+            this.menuStripMainForm.Location = new System.Drawing.Point(0, 0);
+            this.menuStripMainForm.Name = "menuStripMainForm";
+            this.menuStripMainForm.Size = new System.Drawing.Size(536, 24);
+            this.menuStripMainForm.TabIndex = 5;
+            // 
+            // languageToolStripMenuItem
+            // 
+            this.languageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ruLangToolStripMenuItem,
+            this.enLangToolStripMenuItem});
+            this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.languageToolStripMenuItem.Text = "Language";
+            // 
+            // ruLangToolStripMenuItem
+            // 
+            this.ruLangToolStripMenuItem.CheckOnClick = true;
+            this.ruLangToolStripMenuItem.Name = "ruLangToolStripMenuItem";
+            this.ruLangToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.ruLangToolStripMenuItem.Text = "Русский";
+            this.ruLangToolStripMenuItem.Click += new System.EventHandler(this.RuLangToolStripMenuItem_Click);
+            // 
+            // enLangToolStripMenuItem
+            // 
+            this.enLangToolStripMenuItem.CheckOnClick = true;
+            this.enLangToolStripMenuItem.Name = "enLangToolStripMenuItem";
+            this.enLangToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.enLangToolStripMenuItem.Text = "English";
+            this.enLangToolStripMenuItem.Click += new System.EventHandler(this.EnLangToolStripMenuItem_Click);
             // 
             // FormMain
             // 
@@ -281,12 +347,14 @@
             this.Controls.Add(this.sfsSearchLabel);
             this.Controls.Add(this.sfsSearchCriteriaGroupBox);
             this.Controls.Add(this.sfsStatusStrip);
+            this.Controls.Add(this.menuStripMainForm);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStripMainForm;
             this.MaximizeBox = false;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Simple Full-Text Searcher v 1.0";
+            this.Text = "Simple Full-Text Searcher v 1.1.0";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.sfsStatusStrip.ResumeLayout(false);
@@ -294,6 +362,8 @@
             this.sfsSearchCriteriaGroupBox.ResumeLayout(false);
             this.sfsSearchCriteriaGroupBox.PerformLayout();
             this.sfsSearchResultsGroupBox.ResumeLayout(false);
+            this.menuStripMainForm.ResumeLayout(false);
+            this.menuStripMainForm.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,6 +392,12 @@
         private System.Windows.Forms.ToolStripStatusLabel sfsToolStripStatusLabel;
         private System.Windows.Forms.ImageList sfsTreeViewImageList;
         private System.Windows.Forms.Button sfsAboutButton;
+        private System.Windows.Forms.CheckBox searchInZipArchiveCheckBox;
+        private System.Windows.Forms.CheckBox searchInImagescheckBox;
+        private System.Windows.Forms.MenuStrip menuStripMainForm;
+        private System.Windows.Forms.ToolStripMenuItem languageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ruLangToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem enLangToolStripMenuItem;
     }
 }
 

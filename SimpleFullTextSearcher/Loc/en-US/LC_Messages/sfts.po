@@ -1,0 +1,209 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: SFTS\n"
+"POT-Creation-Date: 2019-08-05 01:11+0300\n"
+"PO-Revision-Date: 2019-08-05 01:20+0300\n"
+"Last-Translator: Unchase <spiritkola@hotmail.com>\n"
+"Language-Team: Unchase\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.3\n"
+"X-Poedit-Basepath: ../../..\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-KeywordsList: T._\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:23
+msgid "Should be valid FileStream!"
+msgstr "Should be valid FileStream!"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:26
+msgid "The FileStream does not support read operation!"
+msgstr "The FileStream does not support read operation!"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:29
+msgid "The FileStream does not support search operation!"
+msgstr "The FileStream does not support search operation!"
+
+#: FileSearcher/Helpers/TextFileEncodingHelper.cs:64
+msgid "Should be valid BOM bytes array!"
+msgstr "Should be valid BOM bytes array!"
+
+#: FileSearcher/Searcher.cs:94
+msgid "The string"
+msgstr "The string"
+
+#: FileSearcher/Searcher.cs:96
+msgid "cannot be converted to an array of bytes."
+msgstr "cannot be converted to an array of bytes."
+
+#: FileSearcher/Searcher.cs:102
+msgid "Search string cannot be empty."
+msgstr "Search string cannot be empty."
+
+#: FileSearcher/Searcher.cs:129
+msgid "The directory"
+msgstr "The directory"
+
+#: FileSearcher/Searcher.cs:131
+msgid "not available."
+msgstr "not available."
+
+#: FormMain.Designer.cs:79
+msgid "Ready to the first start"
+msgstr "Ready to the first start"
+
+#: FormMain.Designer.cs:100
+msgid "Search criteria"
+msgstr "Search criteria"
+
+#: FormMain.Designer.cs:109
+msgid "Search in image files (OCR)"
+msgstr "Search in image files (OCR)"
+
+#: FormMain.Designer.cs:120
+msgid "Search in zip-archives"
+msgstr "Search in zip-archives"
+
+#: FormMain.Designer.cs:178
+msgid "Searched text:"
+msgstr "Searched text:"
+
+#: FormMain.Designer.cs:194
+msgid "File-name pattern:"
+msgstr "File-name pattern:"
+
+#: FormMain.Designer.cs:211
+msgid "Starting search directory:"
+msgstr "Starting search directory:"
+
+#: FormMain.Designer.cs:220
+msgid "Search:"
+msgstr "Search:"
+
+#: FormMain.Designer.cs:229
+msgid "Start"
+msgstr "Start"
+
+#: FormMain.Designer.cs:243 FormMain.cs:269
+msgid "Pause"
+msgstr "Pause"
+
+#: FormMain.Designer.cs:257
+msgid "Stop"
+msgstr "Stop"
+
+#: FormMain.Designer.cs:271
+msgid "Search results"
+msgstr "Search results"
+
+#: FormMain.Designer.cs:297 FormMain.cs:283
+msgid "About"
+msgstr "About"
+
+#: FormMain.Designer.cs:318
+msgid "Language"
+msgstr "Language"
+
+#: FormMain.cs:70
+msgid "Failed to save search criteria to file"
+msgstr "Failed to save search criteria to file"
+
+#: FormMain.cs:70 FormMain.cs:86
+msgid "An error has occurred:"
+msgstr "An error has occurred:"
+
+#: FormMain.cs:71
+msgid "Saving search criteria"
+msgstr "Saving search criteria"
+
+#: FormMain.cs:86
+msgid "Failed to load search criteria from file"
+msgstr "Failed to load search criteria from file"
+
+#: FormMain.cs:87
+msgid "Loading search criteria"
+msgstr "Loading search criteria"
+
+#: FormMain.cs:147
+msgid "Found matching in the file:"
+msgstr "Found matching in the file:"
+
+#: FormMain.cs:154
+msgid "Viewed Files"
+msgstr "Viewed Files"
+
+#: FormMain.cs:156
+msgid "Search in:"
+msgstr "Search in:"
+
+#: FormMain.cs:169
+msgid "Total matches found"
+msgstr "Total matches found"
+
+#: FormMain.cs:171
+msgid "Elapsed time:"
+msgstr "Elapsed time:"
+
+#: FormMain.cs:180
+msgid "An error occurred during the search:"
+msgstr "An error occurred during the search:"
+
+#: FormMain.cs:180
+msgid "Searching error"
+msgstr "Searching error"
+
+#: FormMain.cs:220
+msgid "Select the initial search directory"
+msgstr "Select the initial search directory"
+
+#: FormMain.cs:254
+msgid ""
+"Search is already running. Stop the search or wait for the process to "
+"complete."
+msgstr ""
+"Search is already running. Stop the search or wait for the process to "
+"complete."
+
+#: FormMain.cs:255
+msgid "Start searching"
+msgstr "Start searchingа"
+
+#: FormMain.cs:264
+msgid "Continue"
+msgstr "Continue"
+
+#: FormMain.cs:282
+msgid ""
+"The program is designed for full-text search in files with specified search "
+"criteria."
+msgstr ""
+"The program is designed for full-text search in files with specified search "
+"criteria."
+
+#: FormMain.cs:282
+msgid "Author: unchase (https://github.com/unchase), august 2018."
+msgstr "Author: unchase (https://github.com/unchase), august 2018."
+
+#: FormMain.cs:294
+msgid "The search initial directory is not selected or does not exist!"
+msgstr "The search initial directory is not selected or does not exist!"
+
+#: FormMain.cs:294
+msgid "Select it and run the search again."
+msgstr "Select it and run the search again."
+
+#: FormMain.cs:295 FormMain.cs:303 FormMain.cs:311
+msgid "Input Validation"
+msgstr "Input Validation"
+
+#: FormMain.cs:302
+msgid "The file name template should not be empty."
+msgstr "The file name template should not be empty."
+
+#: FormMain.cs:310
+msgid "The text to be searched should not be empty."
+msgstr "The text to be searched should not be empty."

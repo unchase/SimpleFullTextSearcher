@@ -15,7 +15,7 @@ namespace SimpleFullTextSearcher.Extensions
         public static string MillisecondsToTimeString(this long l)
         {
             var ts = new TimeSpan(0, 0, 0, 0, Convert.ToInt32(l));
-            return $"{ts.Days} д, {ts.Hours} ч, {ts.Minutes} м, {ts.Seconds} с, {ts.Milliseconds} мс";
+            return $"{ts.Days} {T._("d")}, {ts.Hours} {T._("h")}, {ts.Minutes} {T._("m")}, {ts.Seconds} {T._("s")}, {ts.Milliseconds} {T._("ms")}";
         }
     }
 }

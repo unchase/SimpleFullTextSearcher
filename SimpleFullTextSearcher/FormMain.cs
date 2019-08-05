@@ -14,7 +14,7 @@ using SimpleFullTextSearcher.FileSearcher.Helpers;
 
 namespace SimpleFullTextSearcher
 {
-    
+
     public partial class FormMain : Form
     {
         #region Settings
@@ -67,8 +67,8 @@ namespace SimpleFullTextSearcher
                 catch (Exception ex)
                 {
                     MessageBox.Show(
-                        $"Не удалось сохранить критерии поиска в файл \"{SearchCriteriaFilePath}\".\nПроизошла ошибка: {ex.Message}",
-                        @"Сохранение критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        T._("Failed to save search criteria to file") + $" \"{SearchCriteriaFilePath}\".\n" + T._("An error has occurred:") + $" {ex.Message}",
+                        T._("Saving search criteria"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -83,8 +83,8 @@ namespace SimpleFullTextSearcher
                 catch (Exception ex)
                 {
                     MessageBox.Show(
-                        $"Не удалось загрузить критерии поиска из файла \"{SearchCriteriaFilePath}\".\nПроизошла ошибка: {ex.Message}",
-                        @"Загрузка критериев поиска", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        T._("Failed to load search criteria from file") + $" \"{SearchCriteriaFilePath}\".\n" + T._("An error has occurred:") + $" {ex.Message}",
+                        T._("Loading search criteria"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return default(Settings);
                 }
             }
@@ -127,6 +127,7 @@ namespace SimpleFullTextSearcher
         public FormMain()
         {
             InitializeComponent();
+            RefreshLocalization();
 
             // загружаем параметры поиска из файла
             CurrentSettings = Settings.LoadSearchCriteriaFromJson() ?? new Settings();
@@ -144,13 +145,17 @@ namespace SimpleFullTextSearcher
             // подписываемся на собственные события (с помощью анонимных методов и лямбда-выражений)
             _foundInfo = eventArgs =>
             {
-                sfsToolStripStatusLabel.Text = $@"Найдено сопадение в файле: {eventArgs.Info.FullName}";
+                sfsToolStripStatusLabel.Text = T._("Found matching in the file:") + $" {eventArgs.Info.FullName}";
 
                 var initialDirectorySplit = eventArgs.Info.FullName.Split('\\');
                 AddFileInfoIntoTreeView(initialDirectorySplit.ToList(), sfsSearchResultsTreeView.Nodes,
                     eventArgs.Info.FullName);
             };
-            _searchInfo = eventArgs => sfsToolStripStatusLabel.Text = $@"Просмотрено файлов - {eventArgs.Count}. Проверяется в: {eventArgs.Info.FullName}";
+            _searchInfo = eventArgs => sfsToolStripStatusLabel.Text =
+                T._("Viewed Files") +
+                $" - {eventArgs.Count}. " +
+                T._("Search in:") +
+                $" {eventArgs.Info.FullName}";
             _taskEnded = eventArgs =>
             {
                 // делаем активными отключенные Controls
@@ -162,8 +167,10 @@ namespace SimpleFullTextSearcher
                     _stopWatch.Stop();
 
                     sfsToolStripStatusLabel.Text =
-                        $@"Всего найдено совпадений - {eventArgs.Count}. Затраченное время: {
-                                _stopWatch.ElapsedMilliseconds.MillisecondsToTimeString()}";
+                        T._("Total matches found") +
+                        $" - {eventArgs.Count}. " +
+                        T._("Elapsed time:") +
+                        $" {_stopWatch.ElapsedMilliseconds.MillisecondsToTimeString()}";
 
                     _stopWatch.Reset();
                 }
@@ -171,7 +178,7 @@ namespace SimpleFullTextSearcher
                 // показать текст ошибки, если необходимо
                 if (!eventArgs.Success)
                 {
-                    MessageBox.Show($@"Во время поиска произошла ошибка: {eventArgs.ErrorMsg}", @"Ошибка поиска",
+                    MessageBox.Show(T._("An error occurred during the search:") + $" {eventArgs.ErrorMsg}", T._("Searching error"),
                         MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             };
@@ -211,7 +218,7 @@ namespace SimpleFullTextSearcher
             var dlg = new FolderBrowserDialog
             {
                 SelectedPath = sfsInitialDirectoryTextBox.Text,
-                Description = @"Выберите начальную директорию поиска"
+                Description = T._("Select the initial search directory")
             };
 
             if (dlg.ShowDialog(this) == DialogResult.OK)
@@ -228,15 +235,15 @@ namespace SimpleFullTextSearcher
             }
 
             Searcher.Stop();
-        } 
-        
+        }
+
         private void sfsSearchStartButton_Click(object sender, EventArgs e)
         {
             if (!CheckInputFields()) return;
             sfsSearchResultsTreeView.Nodes.Clear();
 
             var pars = new SearcherParams(sfsInitialDirectoryTextBox.Text.Trim(), true, sfsFileNamePatternTextBox.Text,
-                true, sfsSearchTextTextBox.Text.Trim(), Encoding.ASCII);
+                true, sfsSearchTextTextBox.Text.Trim(), Encoding.ASCII, searchInZipArchiveCheckBox.Checked , searchInImagescheckBox.Checked);
 
             if (Searcher.Start(pars))
             {
@@ -245,8 +252,8 @@ namespace SimpleFullTextSearcher
             }
             else
             {
-                MessageBox.Show(@"Поиск уже запущен. Остановите поиск или дождитесь окончания процесса.",
-                    @"Запуск поиска", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(T._("Search is already running. Stop the search or wait for the process to complete."),
+                    T._("Start searching"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -255,12 +262,12 @@ namespace SimpleFullTextSearcher
             _searchOnPause = !_searchOnPause;
             if (_searchOnPause)
             {
-                sfsSearchPauseButton.Text = @"Продолжить";
+                sfsSearchPauseButton.Text = T._("Continue");
                 _stopWatch.Stop();
             }
             else
             {
-                sfsSearchPauseButton.Text = @"Пауза";
+                sfsSearchPauseButton.Text = T._("Pause");
                 _stopWatch.Start();
             }
             Searcher.Pause();
@@ -273,9 +280,9 @@ namespace SimpleFullTextSearcher
         private void sfsSearchTextClearButton_Click(object sender, EventArgs e) => sfsSearchTextTextBox.Text = "";
 
         private void sfsAboutButton_Click(object sender, EventArgs e) => MessageBox.Show(
-            "Программа предназначена для полнотекстового поиска в файлах с заданными критериями поиска.\nАвтор: unchase (https://github.com/unchase), август 2018 г.",
-            @"О программе", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        
+            T._("The program is designed for full-text search in files with specified search criteria.") + "\n" + T._("Author: unchase (https://github.com/unchase), august 2018."),
+            T._("About"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+
         #endregion
 
         #region Private methods
@@ -285,24 +292,24 @@ namespace SimpleFullTextSearcher
                 !new DirectoryInfo(sfsInitialDirectoryTextBox.Text).Exists)
             {
                 MessageBox.Show(
-                    "Начальная директория поиска не выбрана или не существует!\nВыберите ее и запустите поиск снова.",
-                    @"Провека входных данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    T._("The search initial directory is not selected or does not exist!") + "\n" + T._("Select it and run the search again."),
+                    T._("Input Validation"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             if (string.IsNullOrEmpty(sfsFileNamePatternTextBox.Text))
             {
                 MessageBox.Show(
-                    @"Шаблон имени файла не должен быть пуст.",
-                    @"Провека входных данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    T._("The file name template should not be empty."),
+                    T._("Input Validation"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             if (string.IsNullOrEmpty(sfsSearchTextTextBox.Text))
             {
                 MessageBox.Show(
-                    @"Искомый текст не должен быть пуст.",
-                    @"Провека входных данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    T._("The text to be searched should not be empty."),
+                    T._("Input Validation"), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
@@ -369,6 +376,57 @@ namespace SimpleFullTextSearcher
             sfsSearchStopButton.Enabled = true;
         }
 
+        private void UncheckOtherToolStripMenuItems(ToolStripMenuItem selectedMenuItem)
+        {
+            selectedMenuItem.Checked = true;
+
+            // Select the other MenuItens from the ParentMenu(OwnerItens) and unchecked this,
+            // The current Linq Expression verify if the item is a real ToolStripMenuItem
+            // and if the item is a another ToolStripMenuItem to uncheck this.
+            foreach (var ltoolStripMenuItem in (from object
+                    item in selectedMenuItem.Owner.Items
+                let ltoolStripMenuItem = item as ToolStripMenuItem
+                where ltoolStripMenuItem != null
+                where !item.Equals(selectedMenuItem)
+                select ltoolStripMenuItem))
+                (ltoolStripMenuItem).Checked = false;
+
+            // This line is optional, for show the mainMenu after click
+            selectedMenuItem.Owner.Show();
+        }
+
         #endregion
+
+        private void RuLangToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UncheckOtherToolStripMenuItems((ToolStripMenuItem)sender);
+            T.SetCatalogLanguage(T.CatalogLocale.Ru);
+            RefreshLocalization();
+        }
+
+        private void EnLangToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            UncheckOtherToolStripMenuItems((ToolStripMenuItem)sender);
+            T.SetCatalogLanguage(T.CatalogLocale.En);
+            RefreshLocalization();
+        }
+
+        private void RefreshLocalization()
+        {
+            this.sfsToolStripStatusLabel.Text = T._("Ready to the first start");
+            this.sfsSearchCriteriaGroupBox.Text = T._("Search criteria");
+            this.searchInImagescheckBox.Text = T._("Search in image files (OCR)");
+            this.searchInZipArchiveCheckBox.Text = T._("Search in zip-archives");
+            this.sfsSearchTextLabel.Text = T._("Searched text:");
+            this.sfsFileNamePatternLabel.Text = T._("File-name pattern:");
+            this.sfsInitialDirectoryLabel.Text = T._("Starting search directory:");
+            this.sfsSearchLabel.Text = T._("Search:");
+            this.sfsSearchStartButton.Text = T._("Start");
+            this.sfsSearchPauseButton.Text = T._("Pause");
+            this.sfsSearchStopButton.Text = T._("Stop");
+            this.sfsSearchResultsGroupBox.Text = T._("Search results");
+            this.sfsAboutButton.Text = T._("About");
+            this.languageToolStripMenuItem.Text = T._("Language");
+        }
     }
 }

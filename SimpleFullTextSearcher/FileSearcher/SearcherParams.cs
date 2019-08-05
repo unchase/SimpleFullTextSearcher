@@ -6,7 +6,7 @@ namespace SimpleFullTextSearcher.FileSearcher
     {
         #region Constructor
         public SearcherParams(string searchDirectories, bool includeSubDirectoriesChecked, string fileName,
-            bool containingChecked, string containingText, Encoding encoding)
+            bool containingChecked, string containingText, Encoding encoding, bool searchInZipArchive, bool searchInImages)
         {
             SearchDir = searchDirectories;
             IncludeSubDirsChecked = includeSubDirectoriesChecked;
@@ -14,6 +14,8 @@ namespace SimpleFullTextSearcher.FileSearcher
             ContainingChecked = containingChecked;
             ContainingText = containingText;
             Encoding = encoding;
+            SearchInZipArchive = searchInZipArchive;
+            SearchInImages = searchInImages;
         }
         #endregion
 
@@ -29,6 +31,10 @@ namespace SimpleFullTextSearcher.FileSearcher
         public string ContainingText { get; }
 
         public Encoding Encoding { get; set; }
+
+        public bool SearchInZipArchive { get; set; }
+
+        public bool SearchInImages { get; set; }
 
         #endregion
     }

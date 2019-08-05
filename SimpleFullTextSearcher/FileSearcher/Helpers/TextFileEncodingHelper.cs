@@ -8,7 +8,7 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
     public static class TextFileEncodingHelper
     {
         private const long DefaultHeuristicSampleSize = 0x10000; //completely arbitrary - inappropriate for high numbers of files / high speed requirements
-        
+
         public static Encoding DetectTextFileEncoding(string inputFilename)
         {
             using (var textfileStream = File.OpenRead(inputFilename))
@@ -20,13 +20,13 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
         public static Encoding DetectTextFileEncoding(FileStream inputFileStream)
         {
             if (inputFileStream == null)
-                throw new ArgumentNullException(nameof(inputFileStream), @"Необходимо представить валидный Filestream!");
+                throw new ArgumentNullException(nameof(inputFileStream), T._("Should be valid FileStream!")); //@"Необходимо представить валидный Filestream!"));
 
             if (!inputFileStream.CanRead)
-                throw new ArgumentException(@"Представленный FileStream не поддерживает операцию чтения!", nameof(inputFileStream));
+                throw new ArgumentException(T._("The FileStream does not support read operation!")); //@"Представленный FileStream не поддерживает операцию чтения!", nameof(inputFileStream));
 
             if (!inputFileStream.CanSeek)
-                throw new ArgumentException(@"Представленный FileStream не поддерживает операцию поиска!", nameof(inputFileStream));
+                throw new ArgumentException(T._("The FileStream does not support search operation!")); //@"Представленный FileStream не поддерживает операцию поиска!", nameof(inputFileStream));
 
             var originalPos = inputFileStream.Position;
 
@@ -57,11 +57,11 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
 
             return encodingFound;
         }
-        
+
         public static Encoding DetectBomBytes(byte[] bomBytes)
         {
             if (bomBytes == null)
-                throw new ArgumentNullException(nameof(bomBytes), @"Необходимо представить валидный BOM массив байтов!");
+                throw new ArgumentNullException(nameof(bomBytes), T._("Should be valid BOM bytes array!")); //@"Необходимо представить валидный BOM массив байтов!"));
 
             if (bomBytes.Length < 2)
                 return null;
@@ -102,8 +102,8 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
             long suspiciousUtf8BytesTotal = 0;
             long likelyUsasciiBytesInSample = 0;
 
-            //Cycle through, keeping count of binary null positions, possible UTF-8 
-            //  sequences from upper ranges of Windows-1252, and probable US-ASCII 
+            //Cycle through, keeping count of binary null positions, possible UTF-8
+            //  sequences from upper ranges of Windows-1252, and probable US-ASCII
             //  character counts.
             long currentPos = 0;
             var skipUtf8Bytes = 0;
@@ -143,8 +143,8 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 currentPos++;
             }
 
-            //1: UTF-16 LE - in english / european environments, this is usually characterized by a 
-            //  high proportion of odd binary nulls (starting at 0), with (as this is text) a low 
+            //1: UTF-16 LE - in english / european environments, this is usually characterized by a
+            //  high proportion of odd binary nulls (starting at 0), with (as this is text) a low
             //  proportion of even binary nulls.
             //  The thresholds here used (less than 20% nulls where you expect non-nulls, and more than
             //  60% nulls where you do expect nulls) are completely arbitrary.
@@ -154,8 +154,8 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 return Encoding.Unicode;
 
 
-            //2: UTF-16 BE - in english / european environments, this is usually characterized by a 
-            //  high proportion of even binary nulls (starting at 0), with (as this is text) a low 
+            //2: UTF-16 BE - in english / european environments, this is usually characterized by a
+            //  high proportion of even binary nulls (starting at 0), with (as this is text) a low
             //  proportion of odd binary nulls.
             //  The thresholds here used (less than 20% nulls where you expect non-nulls, and more than
             //  60% nulls where you do expect nulls) are completely arbitrary.
@@ -165,8 +165,8 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
                 return Encoding.BigEndianUnicode;
 
 
-            //3: UTF-8 - Martin Dürst outlines a method for detecting whether something CAN be UTF-8 content 
-            //  using regexp, in his w3c.org unicode FAQ entry: 
+            //3: UTF-8 - Martin Dürst outlines a method for detecting whether something CAN be UTF-8 content
+            //  using regexp, in his w3c.org unicode FAQ entry:
             //  http://www.w3.org/International/questions/qa-forms-utf-8
             //  adapted here for C#.
             var potentiallyMangledString = Encoding.ASCII.GetString(sampleBytes);
@@ -186,20 +186,20 @@ namespace SimpleFullTextSearcher.FileSearcher.Helpers
             //If some of the characters were in the upper range (western accented characters), however, they would likely be mangled to 2-byte by the UTF-8 encoding process.
             // So, we need to play stats.
 
-            // The "Random" likelihood of any pair of randomly generated characters being one 
+            // The "Random" likelihood of any pair of randomly generated characters being one
             //   of these "suspicious" character sequences is:
             //     128 / (256 * 256) = 0.2%.
             //
-            // In western text data, that is SIGNIFICANTLY reduced - most text data stays in the <127 
-            //   character range, so we assume that more than 1 in 500,000 of these character 
+            // In western text data, that is SIGNIFICANTLY reduced - most text data stays in the <127
+            //   character range, so we assume that more than 1 in 500,000 of these character
             //   sequences indicates UTF-8. The number 500,000 is completely arbitrary - so sue me.
             //
             // We can only assume these character sequences will be rare if we ALSO assume that this
-            //   IS in fact western text - in which case the bulk of the UTF-8 encoded data (that is 
-            //   not already suspicious sequences) should be plain US-ASCII bytes. This, I 
-            //   arbitrarily decided, should be 80% (a random distribution, eg binary data, would yield 
-            //   approx 40%, so the chances of hitting this threshold by accident in random data are 
-            //   VERY low). 
+            //   IS in fact western text - in which case the bulk of the UTF-8 encoded data (that is
+            //   not already suspicious sequences) should be plain US-ASCII bytes. This, I
+            //   arbitrarily decided, should be 80% (a random distribution, eg binary data, would yield
+            //   approx 40%, so the chances of hitting this threshold by accident in random data are
+            //   VERY low).
 
             if (suspiciousUtf8SequenceCount * 500000.0 / sampleBytes.Length >= 1 //suspicious sequences
                 && (
